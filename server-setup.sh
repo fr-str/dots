@@ -1,4 +1,5 @@
 #!/bin/bash
+
 set -ex
 dir=$(pwd)
 # find system package manager
@@ -44,6 +45,7 @@ for v in $(curl https://github.com/aristocratos/btop/releases | grep releases/do
 done
 
 # install oh-my-zsh
+export RUNZSH=no
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 # install zsh-autosuggestions and zsh-syntax-highlighting
 git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.zsh/zsh-autosuggestions
