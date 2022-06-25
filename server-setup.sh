@@ -52,7 +52,7 @@ git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.zsh/zsh-autosu
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.zsh/zsh-syntax-highlighting
 
 # copy contents of cpu-scripts to $HOME/.local/bin
-cp -r cpu-scripts /usr/bin  
+cp -r cpu-scripts/* /usr/bin  
 
 # clone update-golang and insall go
 git clone https://github.com/udhos/update-golang $HOME/.update-golang
