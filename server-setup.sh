@@ -67,6 +67,5 @@ git clone https://github.com/fr-str/CompileDaemon $HOME/.CompileDaemon
 cd $HOME/.CompileDaemon
 export PATH=$PATH:/usr/local/go/bin
 go build
+mkdir -p $HOME/go/bin/
 cp CompileDaemon $HOME/go/bin/
-
-# copy my zshrc to home
