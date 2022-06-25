@@ -10,8 +10,8 @@ elif [ -x /usr/bin/yum ]; then
     PM="yum -y"
 elif [ -x /usr/bin/pacman ]; then
     # Arch Linux
-    YES="--noconfirm"
-    PM="pacman -S"
+    YES="-S --noconfirm"
+    PM="pacman"
 else
     echo "Unable to find a package manager"
     exit 1
