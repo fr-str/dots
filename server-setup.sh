@@ -51,6 +51,8 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.zsh/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.zsh/zsh-syntax-highlighting
 
+cd $dir
+cp .zshrc $HOME/.zshrc
 # copy contents of cpu-scripts to $HOME/.local/bin
 sudo cp -r cpu-scripts/* /usr/bin  
 
@@ -63,10 +65,8 @@ cd $dir
 # install CompileDeamon from https://github.com/fr-str/CompileDaemon
 git clone https://github.com/fr-str/CompileDaemon $HOME/.CompileDaemon
 cd $HOME/.CompileDaemon
+export PATH=$PATH:/usr/local/bin
 go build
 cp CompileDaemon $HOME/go/bin/CompileDaemon
 
 # copy my zshrc to home
-cd $dir
-cp .zshrc $HOME/.zshrc
-source $HOME/.zshrc
