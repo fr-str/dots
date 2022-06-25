@@ -68,5 +68,5 @@ cp CompileDaemon $HOME/go/bin/CompileDaemon
 
 # copy my zshrc to home
 cd $dir
-cp .zshrc $HOME/.zshrc
+sudo cp .zshrc $HOME/.zshrc
 source $HOME/.zshrc
