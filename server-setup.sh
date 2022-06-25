@@ -1,22 +1,27 @@
 #!/bin/bash
+set -ex
 dir=$(pwd)
 # find system package manager
 if [ -x /usr/bin/apt-get ]; then
     # Debian/Ubuntu
-    PM="apt-get"
+    PM="apt-get -y"
 elif [ -x /usr/bin/yum ]; then
     # CentOS/Fedora/RHEL
-    PM="yum"
+    PM="yum -y"
 elif [ -x /usr/bin/pacman ]; then
     # Arch Linux
-    PM="pacman"
+    PM="pacman --noconfirm -S"
 else
     echo "Unable to find a package manager"
     exit 1
 fi
+# check if root
+if [ "$(id -u)" != "0" ]; then
+    sudo="sudo"
+fi
 
 # install stuff that I want
-sudo $PM -y install git zsh docker docker-compose wget
+$sudo $PM install git zsh docker docker-compose wget
 # get newest relase of btop from https://github.com/aristocratos/btop/releases
 regex='^href.*\/.*\/(v[0-9]\.[0-9]\.[0-9])'
 for v in $(curl https://github.com/aristocratos/btop/releases | grep releases/download); do
