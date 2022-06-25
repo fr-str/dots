@@ -1,7 +1,5 @@
-cat <<EOF > /etc/default/cpufrequtils
-GOVERNOR="performance"
-MAX_SPEED="4000MHz"
-EOF
-sudo /etc/init.d/cpufrequtils restart
+cpufreq-set -g performance
+cpufreq-set -d 4000000
+cpufreq-set -f 4000000
 sleep 0.1
 cat /proc/cpuinfo | grep 'cpu MHz'
