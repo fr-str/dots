@@ -10,7 +10,8 @@ elif [ -x /usr/bin/yum ]; then
     PM="yum -y"
 elif [ -x /usr/bin/pacman ]; then
     # Arch Linux
-    PM="pacman --noconfirm -S"
+    YES="--noconfirm"
+    PM="pacman -S"
 else
     echo "Unable to find a package manager"
     exit 1
@@ -21,7 +22,7 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 # install stuff that I want
-$sudo $PM install git zsh docker docker-compose wget
+$sudo $PM install git zsh docker docker-compose wget $YES
 # get newest relase of btop from https://github.com/aristocratos/btop/releases
 regex='^href.*\/.*\/(v[0-9]\.[0-9]\.[0-9])'
 for v in $(curl https://github.com/aristocratos/btop/releases | grep releases/download); do
