@@ -2,7 +2,7 @@
 export PATH=$HOME/bin:/usr/local/bin:/usr/local/go/bin:/home/$USER/go/bin:/home/$USER/.local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/$USER/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -70,7 +70,7 @@ ZSH_THEME="refined"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git kubectl docker sudo history )
+plugins=(git kubectl docker sudo history dirhistory)
 
 source $HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -102,7 +102,13 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 autoload -U colors && colors
+# check if root
 PS1="%(?.%F{green}.%F{red})❯ %f"
+su=sudo
+if [ "$UID" -eq 0 ]; then
+  PS1="%F{cyan}%n %(?.%F{green}.%F{red})❯ %f"
+  su=""
+fi
 
 #env
 export CODE_PATH=~/rekuber-07
@@ -112,13 +118,12 @@ export CSCE=dev
 #aliases----
 
 # debian
-alias aptt="sudo apt -y"
+alias aptt="$su apt -y"
 # fedora
-alias dnff="sudo dnf -y"
+alias dnff="$su dnf -y"
 # git
 alias gst="git status"
 alias gsps="git stash && git pull && git stash pop"
-alias gcrf="git config pull.rebase false"
 # compileDeamon
 alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.sh" -color=true -log-prefix=false -command="$1"; }; f'
 alias cscd='f(){ CompileDaemon -build="" -directory="/home/$USER/rekuber-07" -include="*.sh" -color=true -log-prefix=false -command="/home/$USER/rekuber-07/workstation-starter/starter" -exclude-dir=.git }; f'
@@ -128,8 +133,22 @@ alias k="kubectl"
 alias expl="xdg-open"
 alias sss="ssh server"
 alias rag=". ranger"
-alias cpu="sudo up.sh"
-alias cpd="sudo down.sh"
+alias cpu="$su up.sh"
+alias cpd="$su down.sh"
 alias cpi="cat /proc/cpuinfo | grep 'cpu MHz'"
 alias dockerps="docker ps --format '{{.Names}}: {{.Status}} - {{.Ports}}'"
 
+alias fix-mod="find . -not -path '*/vendor/*' -name 'go.mod' -printf '%h\n' -execdir sh -c 'go mod tidy; go mod vendor; go fmt .' \;"
+alias sss="ssh server"
+alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.sh" -color=true -log-prefix=false -command="$1" -command-stop true; }; f'
+alias recd='f(){ CompileDaemon -build="" -directory="/home/$USER/rekuber-07" -include="*.sh" -color=true -log-prefix=false -command="/home/$USER/.starter -command-stop true" -exclude-dir=.git }; f'
+alias rr="rm -rf"
+alias upgo="$su ~/update-golang/update-golang.sh"
+# -----------------------------------------------------------------------------
+alias prptmp="cd /tmp/home-tmp && mkdir gotmp; cd gotmp && echo 'package main
+
+
+func main() {
+	
+}'>> main.go && go mod init test && code ." 
+# -----------------------------------------------------------------------------
