@@ -52,7 +52,9 @@ git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.zsh/zsh-autosu
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.zsh/zsh-syntax-highlighting
 
 cd $dir
-cp .zshrc $HOME/.zshrc
+# cp .zshrc $HOME/.zshrc
+ln -s $dir/.zshrc $HOME/.zshrc
+sudo ln -s $dir/.zshrc /root/.zshrc
 # copy contents of cpu-scripts to $HOME/.local/bin
 sudo cp -r cpu-scripts/* /usr/bin  
 
