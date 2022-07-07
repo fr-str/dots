@@ -109,11 +109,12 @@ if [ "$UID" -eq 0 ]; then
   PS1="%F{cyan}%n %(?.%F{green}.%F{red})❯ %f"
   su=""
 fi
-
+mkdir -p /tmp/home-tmp
 #env
 export CODE_PATH=~/rekuber-07
 export DATA_PATH=~/rekuber-07/core/data
 export CSCE=dev
+export KUBECONFIG=~/.kube/config:~/.k3d/kubeconfig-k3s-default.yaml:~/.k3d/kubeconfig-upa.yaml
 
 #aliases----
 
