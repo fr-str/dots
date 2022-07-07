@@ -129,6 +129,7 @@ alias gsps="git stash && git pull && git stash pop"
 alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.sh" -color=true -log-prefix=false -command="$1"; }; f'
 alias cscd='f(){ CompileDaemon -build="" -directory="/home/$USER/rekuber-07" -include="*.sh" -color=true -log-prefix=false -command="/home/$USER/rekuber-07/workstation-starter/starter" -exclude-dir=.git }; f'
 # else
+alias cat="bat"
 alias w="watch -n 1"
 alias k="kubectl"
 alias expl="xdg-open"
@@ -144,7 +145,7 @@ alias sss="ssh server"
 alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.sh" -color=true -log-prefix=false -command="$1" -command-stop true; }; f'
 alias recd='f(){ CompileDaemon -build="" -directory="/home/$USER/rekuber-07" -include="*.sh" -color=true -log-prefix=false -command="/home/$USER/.starter -command-stop true" -exclude-dir=.git }; f'
 alias rr="rm -rf"
-alias upgo="$su ~/update-golang/update-golang.sh"
+alias upgo="$su ~/.update-golang/update-golang.sh"
 # -----------------------------------------------------------------------------
 alias prptmp="cd /tmp/home-tmp && mkdir gotmp; cd gotmp && echo 'package main
 
