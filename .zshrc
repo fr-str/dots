@@ -126,8 +126,8 @@ alias dnff="$su dnf -y"
 alias gst="git status"
 alias gsps="git stash && git pull && git stash pop"
 # compileDeamon
-alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.sh" -color=true -log-prefix=false -command="$1"; }; f'
-alias cscd='f(){ CompileDaemon -build="" -directory="/home/$USER/rekuber-07" -include="*.sh" -color=true -log-prefix=false -command="/home/$USER/rekuber-07/workstation-starter/starter" -exclude-dir=.git }; f'
+alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.sh" -color=true -log-prefix=false -command="$1" -command-stop true; }; f'
+alias recd='f(){ CompileDaemon -build="" -directory="/home/$USER/rekuber-07" -include="*.sh" -color=true -log-prefix=false -command="/home/$USER/.starter -command-stop true" -exclude-dir=.git }; f'
 # else
 alias cat="bat"
 alias w="watch -n 1"
@@ -135,15 +135,8 @@ alias k="kubectl"
 alias expl="xdg-open"
 alias sss="ssh server"
 alias rag=". ranger"
-alias cpu="$su up.sh"
-alias cpd="$su down.sh"
-alias cpi="cat /proc/cpuinfo | grep 'cpu MHz'"
-alias dockerps="docker ps --format '{{.Names}}: {{.Status}} - {{.Ports}}'"
 
 alias fix-mod="find . -not -path '*/vendor/*' -name 'go.mod' -printf '%h\n' -execdir sh -c 'go mod tidy; go mod vendor; go fmt .' \;"
-alias sss="ssh server"
-alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.sh" -color=true -log-prefix=false -command="$1" -command-stop true; }; f'
-alias recd='f(){ CompileDaemon -build="" -directory="/home/$USER/rekuber-07" -include="*.sh" -color=true -log-prefix=false -command="/home/$USER/.starter -command-stop true" -exclude-dir=.git }; f'
 alias rr="rm -rf"
 alias upgo="$su ~/.update-golang/update-golang.sh"
 # -----------------------------------------------------------------------------
