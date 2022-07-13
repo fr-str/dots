@@ -136,6 +136,7 @@ alias expl="xdg-open"
 alias sss="ssh server"
 alias rag=". ranger"
 
+alias gic="git clone"
 alias fix-mod="find . -not -path '*/vendor/*' -name 'go.mod' -printf '%h\n' -execdir sh -c 'go mod tidy; go mod vendor; go fmt .' \;"
 alias rr="rm -rf"
 alias upgo="$su ~/.update-golang/update-golang.sh"
@@ -147,3 +148,23 @@ func main() {
 	
 }'>> main.go && go mod init test && code ." 
 # -----------------------------------------------------------------------------
+
+function help {
+    # Replace ? with --help flag
+    if [[ "$BUFFER" =~ '^(-?\w\s?)+\?$' ]]; then
+        BUFFER="${BUFFER::-1} --help"
+    fi
+
+    # If --help flag found, pipe output through bat
+    if [[ "$BUFFER" =~ '^(-?\w\s?)+ --help$' ]]; then
+        BUFFER="$BUFFER | bat -p -l help"
+    fi
+
+    # press enter
+    zle accept-line
+}
+
+zle -N help
+bindkey '^J' help
+bindkey '^M' help
+
