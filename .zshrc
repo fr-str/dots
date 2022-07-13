@@ -149,6 +149,14 @@ func main() {
 }'>> main.go && go mod init test && code ." 
 # -----------------------------------------------------------------------------
 
+# Arch Mirrors update
+distro=$(source /etc/os-release; echo ${ID_LIKE:=$ID})
+if [[ $distro == "arch" ]]; then
+    alias updm-rate="sudo reflector -a 10 -c pl --sort rate --save /etc/pacman.d/mirrorlist"
+    alias updm-score="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist"
+fi
+
+
 function help {
     # Replace ? with --help flag
     if [[ "$BUFFER" =~ '^(-?\w\s?)+\?$' ]]; then
