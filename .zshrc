@@ -35,7 +35,8 @@ export CSCE=dev
 export KUBECONFIG=~/.kube/config:~/.k3d/kubeconfig-k3s-default.yaml:~/.k3d/kubeconfig-upa.yaml
 
 #aliases----
-
+#arch
+alias pacman="sudo pacman"
 # debian
 alias aptt="$su apt -y"
 # fedora
@@ -75,7 +76,24 @@ if [[ $distro == "arch" ]]; then
 fi
 
 
-function help {
+# function help {
+#     # Replace ? with --help flag
+#     if [[ "$BUFFER" =~ '^(-?\w\s?)+\?$' ]]; then
+#         BUFFER="${BUFFER::-1} --help"
+#     fi
+
+#     # If --help flag found, pipe output through bat
+#     if [[ "$BUFFER" =~ '^(-?\w\s?)+ --help$' ]]; then
+#         BUFFER="$BUFFER | bat -p -l help"
+#     fi
+
+#     # press enter
+#     zle accept-line
+# }
+
+function autocorrect() {
+    zle .spell-word
+    zle .$WIDGET
     # Replace ? with --help flag
     if [[ "$BUFFER" =~ '^(-?\w\s?)+\?$' ]]; then
         BUFFER="${BUFFER::-1} --help"
@@ -86,11 +104,14 @@ function help {
         BUFFER="$BUFFER | bat -p -l help"
     fi
 
-    # press enter
-    zle accept-line
+    # # press enter
+    # zle accept-line
 }
 
-zle -N help
-bindkey '^J' help
-bindkey '^M' help
+zle -N accept-line autocorrect
+zle -N magic-space autocorrect
+bindkey ' ' magic-space
 
+# zle -N help
+# bindkey '^J' help
+# bindkey '^M' help
