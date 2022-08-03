@@ -29,10 +29,11 @@ fi
 
 mkdir -p /tmp/home-tmp
 #env
-export CODE_PATH=~/rekuber-07
-export DATA_PATH=~/rekuber-07/core/data
+export CODE_PATH=~/timoni-07
+export DATA_PATH=~/timoni-07/core/data
 export CSCE=dev
 export KUBECONFIG=~/.kube/config:~/.k3d/kubeconfig-k3s-default.yaml:~/.k3d/kubeconfig-upa.yaml
+export DOCKER_BUILDKIT=1
 
 #aliases----
 #arch
@@ -45,8 +46,8 @@ alias dnff="$su dnf -y"
 alias gst="git status"
 alias gsps="git stash && git pull && git stash pop"
 # compileDeamon
-alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.sh" -color=true -log-prefix=false -command="$1" -command-stop true; }; f'
-alias recd='f(){ CompileDaemon -build="" -directory="/home/$USER/rekuber-07" -include="*.sh" -color=true -log-prefix=false -command="/home/$USER/.starter -command-stop true" -exclude-dir=.git }; f'
+alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.sh" -color=true -log-prefix=false -command="$1" -command-stop=true; }; f'
+alias recd='f(){ CompileDaemon -build="" -directory="/home/$USER/timoni-07" -include="*.sh" -color=true -log-prefix=false -command="/home/$USER/.starter -command-stop true" -exclude-dir=.git }; f'
 # else
 alias cat="bat"
 alias w="watch -n 1"
@@ -76,24 +77,7 @@ if [[ $distro == "arch" ]]; then
 fi
 
 
-# function help {
-#     # Replace ? with --help flag
-#     if [[ "$BUFFER" =~ '^(-?\w\s?)+\?$' ]]; then
-#         BUFFER="${BUFFER::-1} --help"
-#     fi
-
-#     # If --help flag found, pipe output through bat
-#     if [[ "$BUFFER" =~ '^(-?\w\s?)+ --help$' ]]; then
-#         BUFFER="$BUFFER | bat -p -l help"
-#     fi
-
-#     # press enter
-#     zle accept-line
-# }
-
-function autocorrect() {
-    zle .spell-word
-    zle .$WIDGET
+function help {
     # Replace ? with --help flag
     if [[ "$BUFFER" =~ '^(-?\w\s?)+\?$' ]]; then
         BUFFER="${BUFFER::-1} --help"
@@ -104,14 +88,31 @@ function autocorrect() {
         BUFFER="$BUFFER | bat -p -l help"
     fi
 
-    # # press enter
-    # zle accept-line
+    # press enter
+    zle accept-line
 }
 
-zle -N accept-line autocorrect
-zle -N magic-space autocorrect
-bindkey ' ' magic-space
+# function autocorrect() {
+#     #zle .spell-word
+#     #zle .$WIDGET
+#     # Replace ? with --help flag
+#     if [[ "$BUFFER" =~ '^(-?\w\s?)+\?$' ]]; then
+#         BUFFER="${BUFFER::-1} --help"
+#     fi
 
-# zle -N help
-# bindkey '^J' help
-# bindkey '^M' help
+#     # If --help flag found, pipe output through bat
+#     if [[ "$BUFFER" =~ '^(-?\w\s?)+ --help$' ]]; then
+#         BUFFER="$BUFFER | bat -p -l help"
+#     fi
+
+#     # # press enter
+#     zle accept-line
+# }
+
+#zle -N accept-line autocorrect
+#zle -N magic-space autocorrect
+#bindkey ' ' magic-space
+
+zle -N help
+bindkey '^J' help
+bindkey '^M' help
