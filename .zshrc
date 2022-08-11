@@ -32,8 +32,10 @@ mkdir -p /tmp/home-tmp
 export CODE_PATH=~/timoni-07
 export DATA_PATH=~/timoni-07/core/data
 export CSCE=dev
-export KUBECONFIG=~/.kube/config:~/.k3d/kubeconfig-k3s-default.yaml:~/.k3d/kubeconfig-upa.yaml
 export DOCKER_BUILDKIT=1
+#kubeconfig
+alias get-all-configs='f(){ v=$(find ~/.k3d/ -maxdepth 1 | tail -n +2 |xargs | sed "s/ /:/g");if [ -z "$v" ]; then;echo "$HOME/.kube/config";else;echo "$v:$HOME/.kube/config";fi; }; f'
+export KUBECONFIG=$(get-all-configs)
 
 #aliases----
 #arch
@@ -63,10 +65,11 @@ alias upgo="$su ~/.update-golang/update-golang.sh"
 # -----------------------------------------------------------------------------
 alias prptmp="cd /tmp/home-tmp && mkdir gotmp; cd gotmp && echo 'package main
 
-
 func main() {
 	
 }'>> main.go && go mod init test && code ." 
+alias math='f(){ echo "$1" | bc; }; f'
+
 # -----------------------------------------------------------------------------
 
 # Arch Mirrors update
