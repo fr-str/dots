@@ -18,7 +18,7 @@ elif [ -x /usr/bin/pacman ]; then
     makepkg -si --noconfirm
     cd $dir
     PM="yay -S --noconfirm"
-    $PM ttf-jetbrains-mono ttf-symbola noto-fonts-emoji ttf-joypixels ttf-twemoji
+    $PM ttf-jetbrains-mono noto-fonts-emoji ttf-joypixels bat
 else
     echo "Unable to find a package manager"
     exit 1
@@ -59,3 +59,8 @@ export PATH=$PATH:/usr/local/go/bin
 go build
 mkdir -p $HOME/go/bin/
 cp CompileDaemon $HOME/go/bin/
+
+# to fix dark theme on arch in gnome
+# .config/gtk-x.0/settings.ini
+# [Settings]
+# gtk-application-prefer-dark-theme=1
