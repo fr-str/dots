@@ -18,7 +18,7 @@ elif [ -x /usr/bin/pacman ]; then
     makepkg -si --noconfirm
     cd $dir
     PM="yay -S --noconfirm"
-    $PM ttf-jetbrains-mono noto-fonts-emoji ttf-joypixels bat
+    $PM ttf-jetbrains-mono noto-fonts-emoji ttf-joypixels bat visual-studio-code-bin
 else
     echo "Unable to find a package manager"
     exit 1
@@ -42,6 +42,10 @@ rm -f $HOME/.zshrc
 ln -s $dir/.zshrc $HOME/.zshrc
 $sudo rm -f /root/.zshrc
 $sudo ln -s $dir/.zshrc /root/.zshrc
+# if not root copy .zsh to /root
+if [ "$(id -u)" != "0" ]; then
+    cp -r $HOME/.zsh /root/.zsh
+fi
 
 # copy contents of cpu-scripts to $HOME/.local/bin
 $sudo cp -r cpu-scripts/* /usr/bin  
