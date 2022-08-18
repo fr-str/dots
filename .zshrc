@@ -6,13 +6,31 @@ export ZSH="$HOME/.oh-my-zsh"
 
 
 ZSH_THEME="refined"
+PLUGIN_PATH="${ZSH_CUSTOM1:-$ZSH/custom}/plugins"
 
+plugins=(git kubectl docker sudo history dirhistory alias-tips )
+# for zsh_codex
+zle -N create_completion
+bindkey '^X' create_completion
+# ------------
+function installSource(){
+  if [[ ! -d $PLUGIN_PATH/$1 ]]; then
+    git clone $2 $PLUGIN_PATH/$1
+  fi
+}
+# install stuff
+installSource zsh-autosuggestions https://github.com/zsh-users/zsh-autosuggestions
+installSource zsh-syntax-highlighting https://github.com/zsh-users/zsh-syntax-highlighting.git
+installSource autopair https://github.com/hlissner/zsh-autopair
+installSource alias-tips https://github.com/djui/alias-tips.git
 
-plugins=(git kubectl docker sudo history dirhistory)
-
-source $HOME/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source $HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $PLUGIN_PATH/autopair/autopair.zsh
+autopair-init
+source $PLUGIN_PATH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $PLUGIN_PATH/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $PLUGIN_PATH/autojump/autojump.zsh
 source $ZSH/oh-my-zsh.sh
+source <(k3d completion zsh)
 
 autoload -U colors && colors
 # check if root
@@ -62,6 +80,7 @@ alias gic="git clone"
 alias fix-mod="find . -not -path '*/vendor/*' -name 'go.mod' -printf '%h\n' -execdir sh -c 'go mod tidy; go mod vendor; go fmt .' \;"
 alias rr="rm -rf"
 alias upgo="$su ~/.update-golang/update-golang.sh"
+alias mkdircd='f(){ mkdir -p $1 && cd $1 }; f'
 # -----------------------------------------------------------------------------
 alias prptmp="cd /tmp/home-tmp && mkdir gotmp; cd gotmp && echo 'package main
 

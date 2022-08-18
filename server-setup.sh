@@ -18,7 +18,7 @@ elif [ -x /usr/bin/pacman ]; then
     makepkg -si --noconfirm
     cd $dir
     PM="yay -S --noconfirm"
-    $PM ttf-jetbrains-mono noto-fonts-emoji ttf-joypixels bat visual-studio-code-bin
+    $PM ttf-jetbrains-mono noto-fonts-emoji ttf-joypixels bat autojump-rsvisual-studio-code-bin
 else
     echo "Unable to find a package manager"
     exit 1
@@ -33,9 +33,6 @@ $sudo $PM git zsh docker docker-compose wget btop
 
 # install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended
-# install zsh-autosuggestions and zsh-syntax-highlighting
-git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.zsh/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.zsh/zsh-syntax-highlighting
 
 cd $dir
 rm -f $HOME/.zshrc
