@@ -8,27 +8,31 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="refined"
 PLUGIN_PATH="${ZSH_CUSTOM1:-$ZSH/custom}/plugins"
 
-plugins=(git kubectl docker sudo history dirhistory alias-tips )
+plugins=(git kubectl docker sudo history dirhistory alias-tips linus-rants update-plugin)
 # for zsh_codex
 zle -N create_completion
 bindkey '^X' create_completion
 # ------------
 function installSource(){
   if [[ ! -d $PLUGIN_PATH/$1 ]]; then
-    git clone $2 $PLUGIN_PATH/$1
+    git clone $2 $PLUGIN_PATH/$1 &
   fi
 }
 # install stuff
 installSource zsh-autosuggestions https://github.com/zsh-users/zsh-autosuggestions
-installSource zsh-syntax-highlighting https://github.com/zsh-users/zsh-syntax-highlighting.git
 installSource autopair https://github.com/hlissner/zsh-autopair
 installSource alias-tips https://github.com/djui/alias-tips.git
+installSource fast-syntax-highlighting https://github.com/zdharma-continuum/fast-syntax-highlighting
+installSource linus-rants https://github.com/bhayward93/Linus-rants-ZSH.git
+installSource update-plugin https://github.com/AndrewHaluza/zsh-update-plugin.git
+# installSource zsh-syntax-highlighting https://github.com/zsh-users/zsh-syntax-highlighting.git
 
 source $PLUGIN_PATH/autopair/autopair.zsh
 autopair-init
-source $PLUGIN_PATH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# source $PLUGIN_PATH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $PLUGIN_PATH/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $PLUGIN_PATH/autojump/autojump.zsh
+source $PLUGIN_PATH/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 source $ZSH/oh-my-zsh.sh
 source <(k3d completion zsh)
 
@@ -56,6 +60,7 @@ alias get-all-configs='f(){ v=$(find ~/.k3d/ -maxdepth 1 | tail -n +2 |xargs | s
 export KUBECONFIG=$(get-all-configs)
 
 #aliases----
+eval $(thefuck --alias)
 #arch
 alias pacman="sudo pacman"
 # debian
