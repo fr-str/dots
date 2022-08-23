@@ -8,7 +8,7 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="refined"
 PLUGIN_PATH="${ZSH_CUSTOM1:-$ZSH/custom}/plugins"
 
-plugins=(git kubectl docker sudo history dirhistory alias-tips linus-rants update-plugin)
+plugins=(git kubectl docker sudo history dirhistory alias-tips  update-plugin linus-rants)
 # for zsh_codex
 zle -N create_completion
 bindkey '^X' create_completion
@@ -25,11 +25,9 @@ installSource alias-tips https://github.com/djui/alias-tips.git
 installSource fast-syntax-highlighting https://github.com/zdharma-continuum/fast-syntax-highlighting
 installSource linus-rants https://github.com/bhayward93/Linus-rants-ZSH.git
 installSource update-plugin https://github.com/AndrewHaluza/zsh-update-plugin.git
-# installSource zsh-syntax-highlighting https://github.com/zsh-users/zsh-syntax-highlighting.git
 
 source $PLUGIN_PATH/autopair/autopair.zsh
 autopair-init
-# source $PLUGIN_PATH/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $PLUGIN_PATH/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $PLUGIN_PATH/autojump/autojump.zsh
 source $PLUGIN_PATH/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
@@ -82,6 +80,7 @@ alias sss="ssh server"
 alias rag=". ranger"
 
 alias gic="git clone"
+alias code-cleanup="cc"
 alias fix-mod="find . -not -path '*/vendor/*' -name 'go.mod' -printf '%h\n' -execdir sh -c 'go mod tidy; go mod vendor; go fmt .' \;"
 alias rr="rm -rf"
 alias upgo="$su ~/.update-golang/update-golang.sh"
@@ -95,6 +94,17 @@ func main() {
 alias math='f(){ echo "$1" | bc; }; f'
 
 # -----------------------------------------------------------------------------
+
+function cc(){
+  git fetch --prune
+  branches=$(git branch -vv | grep ': gone]' | awk '{print $1}')
+
+  if [ -z $branches ]; then
+      echo "Nothing to do"
+  fi
+  echo $branches | xargs -n1 --no-run-if-empty git branch --delete --force
+}
+
 
 # Arch Mirrors update
 distro=$(source /etc/os-release; echo ${ID_LIKE:=$ID})
