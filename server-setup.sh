@@ -18,7 +18,7 @@ elif [ -x /usr/bin/pacman ]; then
     makepkg -si --noconfirm
     cd $dir
     PM="yay -S --noconfirm"
-    $PM ttf-jetbrains-mono noto-fonts-emoji ttf-joypixels bat autojump-rsvisual-studio-code-bin
+    $PM ttf-jetbrains-mono rsync k3d reflector noto-fonts-emoji ttf-joypixels bat autojump-rsvisual-studio-code-bin lolcat cowsay thefuck
 else
     echo "Unable to find a package manager"
     exit 1

@@ -13,11 +13,15 @@ plugins=(git kubectl docker sudo history dirhistory alias-tips  update-plugin li
 zle -N create_completion
 bindkey '^X' create_completion
 # ------------
+if [[ ! -d $PLUGIN_PATH ]]; then
+  mkdir -p $PLUGIN_PATH
+fi
 function installSource(){
   if [[ ! -d $PLUGIN_PATH/$1 ]]; then
     git clone $2 $PLUGIN_PATH/$1 &
   fi
 }
+
 # install stuff
 installSource zsh-autosuggestions https://github.com/zsh-users/zsh-autosuggestions
 installSource autopair https://github.com/hlissner/zsh-autopair
@@ -32,7 +36,10 @@ source $PLUGIN_PATH/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $PLUGIN_PATH/autojump/autojump.zsh
 source $PLUGIN_PATH/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 source $ZSH/oh-my-zsh.sh
-source <(k3d completion zsh)
+$(which k3d) &>> /dev/null
+if [[  $? -eq 0 ]]; then 
+  source <(k3d completion zsh)
+fi
 
 autoload -U colors && colors
 # check if root
