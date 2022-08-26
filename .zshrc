@@ -51,6 +51,7 @@ if [ "$UID" -eq 0 ]; then
 fi
 if [ "$USER" = "fs" ]; then
   PS1="%F{cyan}server:%n %(?.%F{green}.%F{red})❯ %f"
+  alias shutdown="echo 'TY DEBILU'"
 fi
 
 
