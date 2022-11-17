@@ -57,12 +57,9 @@ fi
 
 mkdir -p /tmp/home-tmp
 #env
-export CODE_PATH=~/timoni-07
-export DATA_PATH=~/timoni-07/core/data
-export CSCE=dev
 export DOCKER_BUILDKIT=1
 #kubeconfig
-alias get-all-configs='f(){ v=$(find ~/.k3d/ -maxdepth 1 | tail -n +2 |xargs | sed "s/ /:/g");if [ -z "$v" ]; then;echo "$HOME/.kube/config";else;echo "$v:$HOME/.kube/config";fi; }; f'
+alias get-all-configs='f(){ v=$(find ~/.k3d/ -maxdepth 1 | tail -n +2 |xargs | sed "s/ /:/g");if [ -z "$v" ]; then;echo "$HOME/.kube/config";export KUBECONFIG=$HOME/.kube/config;else;echo "$v:$HOME/.kube/config";KUBECONFIG="$v:$HOME/.kube/config";fi; }; f'
 export KUBECONFIG=$(get-all-configs)
 
 #aliases----
