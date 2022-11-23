@@ -8,7 +8,7 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="refined"
 PLUGIN_PATH="${ZSH_CUSTOM1:-$ZSH/custom}/plugins"
 
-plugins=(git kubectl docker sudo history dirhistory alias-tips  update-plugin linus-rants)
+plugins=(git kubectl docker sudo history dirhistory alias-tips update-plugin linus-rants command-not-found)
 # for zsh_codex
 zle -N create_completion
 bindkey '^X' create_completion
@@ -58,9 +58,12 @@ fi
 mkdir -p /tmp/home-tmp
 #env
 export DOCKER_BUILDKIT=1
+export EDITOR=vim
 #kubeconfig
 alias get-all-configs='f(){ v=$(find ~/.k3d/ -maxdepth 1 | tail -n +2 |xargs | sed "s/ /:/g");if [ -z "$v" ]; then;echo "$HOME/.kube/config";export KUBECONFIG=$HOME/.kube/config;else;echo "$v:$HOME/.kube/config";KUBECONFIG="$v:$HOME/.kube/config";fi; }; f'
 export KUBECONFIG=$(get-all-configs)
+export KUBE_CONFIG_FILE=$HOME/.k3d/kubeconfig-k3s-default.yaml
+export LOGGER=dev
 
 #aliases----
 eval $(thefuck --alias)
@@ -72,21 +75,21 @@ alias aptt="$su apt -y"
 alias dnff="$su dnf -y"
 # git
 alias gst="git status"
-alias gsps="git stash && git pull && git stash pop"
+alias gsps="git stash && git pull --rebase && git stash pop"
 # compileDeamon
-alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.sh" -color=true -log-prefix=false -command="$1" -command-stop=true; }; f'
-alias recd='f(){ CompileDaemon -build="" -directory="/home/$USER/timoni-07" -include="*.sh" -color=true -log-prefix=false -command="/home/$USER/.starter -command-stop true" -exclude-dir=.git }; f'
+alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.sh" -include="*.toml" -color=true -log-prefix=false -command="$1" -command-stop=true; }; f'
+alias ticd='f(){ CompileDaemon -build="" -directory="/home/$USER/timoni" -include="*.sh" -color=true -log-prefix=false -command="/home/$USER/timoni/1/ti-run.sh -command-stop true" -exclude-dir=.git }; f'
 # else
 alias cat="bat"
+alias cdl='f(){cd $1 && ll }; f'
 alias w="watch -n 1"
 alias k="kubectl"
 alias expl="xdg-open"
 alias sss="ssh server"
 alias rag=". ranger"
-
 alias gic="git clone"
 alias code-cleanup="cc"
-alias fix-mod="find . -not -path '*/vendor/*' -name 'go.mod' -printf '%h\n' -execdir sh -c 'go mod tidy; go mod vendor; go fmt .' \;"
+alias fix-mod="find . -not -path '*/vendor/*' -name 'go.mod' -printf '%h\n' -execdir sh -c 'go mod tidy; go fmt .' \;"
 alias rr="rm -rf"
 alias upgo="$su ~/.update-golang/update-golang.sh"
 alias mkdircd='f(){ mkdir -p $1 && cd $1 }; f'
