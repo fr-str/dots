@@ -68,7 +68,7 @@ export LOGGER=dev
 #aliases----
 eval $(thefuck --alias)
 #arch
-alias pacman="sudo pacman"
+alias pacman="$su pacman"
 # debian
 alias aptt="$su apt -y"
 # fedora
@@ -93,6 +93,7 @@ alias fix-mod="find . -not -path '*/vendor/*' -name 'go.mod' -printf '%h\n' -exe
 alias rr="rm -rf"
 alias upgo="$su ~/.update-golang/update-golang.sh"
 alias mkdircd='f(){ mkdir -p $1 && cd $1 }; f'
+alias nv=nvim
 # -----------------------------------------------------------------------------
 alias prptmp="cd /tmp/home-tmp && mkdir gotmp; cd gotmp && echo 'package main
 
@@ -161,3 +162,7 @@ function help {
 zle -N help
 bindkey '^J' help
 bindkey '^M' help
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
