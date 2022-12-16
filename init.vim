@@ -40,6 +40,7 @@ nnoremap <C-f> :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <F2> :GoRename<CR>
+nnoremap <C-_> :Commentary<CR>
 nmap <F8> :TagbarToggle<CR>
 
 if exists('+termguicolors')
