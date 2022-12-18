@@ -159,6 +159,11 @@ _G.packer_plugins = {
     path = "/home/user/.local/share/nvim/site/pack/packer/start/undotree",
     url = "https://github.com/mbbill/undotree"
   },
+  ["vim-commentary"] = {
+    loaded = true,
+    path = "/home/user/.local/share/nvim/site/pack/packer/start/vim-commentary",
+    url = "https://github.com/tpope/vim-commentary"
+  },
   ["vim-fugitive"] = {
     loaded = true,
     path = "/home/user/.local/share/nvim/site/pack/packer/start/vim-fugitive",
@@ -169,6 +174,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/user/.local/share/nvim/site/pack/packer/start/vim-monokai-tasty",
     url = "https://github.com/patstockwell/vim-monokai-tasty"
+  },
+  ["vim-visual-multi"] = {
+    loaded = true,
+    path = "/home/user/.local/share/nvim/site/pack/packer/start/vim-visual-multi",
+    url = "https://github.com/mg979/vim-visual-multi"
   }
 }
 
