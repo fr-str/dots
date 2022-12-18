@@ -1,18 +1,12 @@
-# If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:/usr/local/go/bin:/home/$USER/go/bin:/home/$USER/.local/bin:$PATH
 
-# Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-
 
 ZSH_THEME="refined"
 PLUGIN_PATH="${ZSH_CUSTOM1:-$ZSH/custom}/plugins"
 
 plugins=(git kubectl docker sudo history dirhistory alias-tips update-plugin linus-rants command-not-found)
-# for zsh_codex
-zle -N create_completion
-bindkey '^X' create_completion
-# ------------
+
 if [[ ! -d $PLUGIN_PATH ]]; then
   mkdir -p $PLUGIN_PATH
 fi
