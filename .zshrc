@@ -37,12 +37,13 @@ fi
 
 autoload -U colors && colors
 # check if root
-PS1="%(?.%F{green}.%F{red})❯ %f"
+PS1="%F%(?.%F{green}.%F{red})❯ %f"
 su=sudo
 if [ "$UID" -eq 0 ]; then
   PS1="%F{cyan}%n %(?.%F{green}.%F{red})❯ %f"
   su=""
 fi
+
 if [ "$USER" = "fs" ]; then
   PS1="%F{cyan}server:%n %(?.%F{green}.%F{red})❯ %f"
   alias shutdown="echo 'TY DEBILU'"
@@ -52,7 +53,7 @@ fi
 mkdir -p /tmp/home-tmp
 #env
 export DOCKER_BUILDKIT=1
-export EDITOR=vim
+export EDITOR=nvim
 #kubeconfig
 alias get-all-configs='f(){ v=$(find ~/.k3d/ -maxdepth 1 | tail -n +2 |xargs | sed "s/ /:/g");if [ -z "$v" ]; then;echo "$HOME/.kube/config";export KUBECONFIG=$HOME/.kube/config;else;echo "$v:$HOME/.kube/config";KUBECONFIG="$v:$HOME/.kube/config";fi; }; f'
 export KUBECONFIG=$(get-all-configs)
@@ -75,7 +76,6 @@ alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.sh" -incl
 alias ticd='f(){ CompileDaemon -build="" -directory="/home/$USER/timoni" -include="*.sh" -color=true -log-prefix=false -command="/home/$USER/timoni/1/ti-run.sh -command-stop true" -exclude-dir=.git }; f'
 # else
 alias cat="bat"
-alias cdl='f(){cd $1 && ll }; f'
 alias w="watch -n 1"
 alias k="kubectl"
 alias expl="xdg-open"
@@ -87,7 +87,8 @@ alias fix-mod="find . -not -path '*/vendor/*' -name 'go.mod' -printf '%h\n' -exe
 alias rr="rm -rf"
 alias upgo="$su ~/.update-golang/update-golang.sh"
 alias mkdircd='f(){ mkdir -p $1 && cd $1 }; f'
-alias nv=nvim
+alias lego="lego --path $HOME"
+alias vim=nvim
 # -----------------------------------------------------------------------------
 alias prptmp="cd /tmp/home-tmp && mkdir gotmp; cd gotmp && echo 'package main
 
@@ -116,7 +117,7 @@ if [[ $distro == "arch" ]]; then
     alias updm-score="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist"
 fi
 
-
+s='(run|build|make|install|yay)'
 function help {
     # Replace ? with --help flag
     if [[ "$BUFFER" =~ '^(-?\w\s?)+\?$' ]]; then
@@ -128,34 +129,31 @@ function help {
         BUFFER="$BUFFER | bat -p -l help"
     fi
 
+    # If contains run, build, make or install, change govenor to performance 
+    if [[ "$BUFFER" =~ $s ]]; then
+        # sudo cpupower frequency-set -g performance > /dev/null
+        # zle accept-line
+    fi
+
     # press enter
     zle accept-line
 }
 
-# function autocorrect() {
-#     #zle .spell-word
-#     #zle .$WIDGET
-#     # Replace ? with --help flag
-#     if [[ "$BUFFER" =~ '^(-?\w\s?)+\?$' ]]; then
-#         BUFFER="${BUFFER::-1} --help"
-#     fi
+function dupa() {
+    if [[ last_command=$(fc -ln -1) =~ $s ]]; then
+        # sudo cpupower frequency-set -g powersave > /dev/null
+    fi
+}
 
-#     # If --help flag found, pipe output through bat
-#     if [[ "$BUFFER" =~ '^(-?\w\s?)+ --help$' ]]; then
-#         BUFFER="$BUFFER | bat -p -l help"
-#     fi
-
-#     # # press enter
-#     zle accept-line
-# }
-
-#zle -N accept-line autocorrect
-#zle -N magic-space autocorrect
-#bindkey ' ' magic-space
+autoload -U add-zsh-hook
+add-zsh-hook precmd dupa
+#precmd_functions+=(changeGovernor)
 
 zle -N help
 bindkey '^J' help
 bindkey '^M' help
+bindkey '^ ' autosuggest-accept
+# bindkey '^=' autosuggest-execute
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
