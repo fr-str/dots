@@ -175,6 +175,11 @@ _G.packer_plugins = {
     path = "/home/user/.local/share/nvim/site/pack/packer/start/vim-monokai-tasty",
     url = "https://github.com/patstockwell/vim-monokai-tasty"
   },
+  ["vim-surround"] = {
+    loaded = true,
+    path = "/home/user/.local/share/nvim/site/pack/packer/start/vim-surround",
+    url = "https://github.com/tpope/vim-surround"
+  },
   ["vim-visual-multi"] = {
     loaded = true,
     path = "/home/user/.local/share/nvim/site/pack/packer/start/vim-visual-multi",

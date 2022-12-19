@@ -8,7 +8,6 @@ return require('packer').startup(function(use)
 	use 'wbthomason/packer.nvim'
 	use {
 		'nvim-telescope/telescope.nvim', tag = '0.1.0',
-		-- or                            , branch = '0.1.x',
 		requires = { {'nvim-lua/plenary.nvim'} }
 	}
 	use ({
@@ -21,6 +20,8 @@ return require('packer').startup(function(use)
 	use('mbbill/undotree')
 	use('tpope/vim-fugitive')
     use('tpope/vim-commentary')
+    use('tpope/vim-surround')
+
     use('mg979/vim-visual-multi')
 
 	use {

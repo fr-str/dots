@@ -37,7 +37,7 @@ fi
 
 autoload -U colors && colors
 # check if root
-PS1="%F%(?.%F{green}.%F{red})❯ %f"
+PS1="%F{cyan}server %(?.%F{green}.%F{red})❯ %f"
 su=sudo
 if [ "$UID" -eq 0 ]; then
   PS1="%F{cyan}%n %(?.%F{green}.%F{red})❯ %f"
