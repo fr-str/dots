@@ -85,7 +85,8 @@ alias gic="git clone"
 alias code-cleanup="cc"
 alias fix-mod="find . -not -path '*/vendor/*' -name 'go.mod' -printf '%h\n' -execdir sh -c 'go mod tidy; go fmt .' \;"
 alias rr="rm -rf"
-alias upgo="$su ~/.update-golang/update-golang.sh"
+alias upgo="dupa=$(pwd) && cd ~/.update-golang && git pull && $su ~/.update-golang/update-golang.sh && cd $dupa"
+alias upupgo=""
 alias mkdircd='f(){ mkdir -p $1 && cd $1 }; f'
 alias lego="lego --path $HOME"
 alias vim=nvim
