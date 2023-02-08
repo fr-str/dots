@@ -5,7 +5,8 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="refined"
 PLUGIN_PATH="${ZSH_CUSTOM1:-$ZSH/custom}/plugins"
 
-plugins=(git kubectl docker sudo history dirhistory alias-tips update-plugin linus-rants command-not-found)
+plugins=(git kubectl docker sudo history dirhistory alias-tips update-plugin command-not-found)
+# plugins=(git kubectl docker sudo history dirhistory alias-tips update-plugin linus-rants command-not-found)
 
 if [[ ! -d $PLUGIN_PATH ]]; then
   mkdir -p $PLUGIN_PATH
@@ -16,18 +17,11 @@ function installSource(){
   fi
 }
 
-# install stuff
-installSource zsh-autosuggestions https://github.com/zsh-users/zsh-autosuggestions
-installSource autopair https://github.com/hlissner/zsh-autopair
-installSource alias-tips https://github.com/djui/alias-tips.git
-installSource fast-syntax-highlighting https://github.com/zdharma-continuum/fast-syntax-highlighting
-installSource linus-rants https://github.com/bhayward93/Linus-rants-ZSH.git
-installSource update-plugin https://github.com/AndrewHaluza/zsh-update-plugin.git
 
 source $PLUGIN_PATH/autopair/autopair.zsh
 autopair-init
 source $PLUGIN_PATH/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $PLUGIN_PATH/autojump/autojump.zsh
+# source $PLUGIN_PATH/autojump/autojump.zsh
 source $PLUGIN_PATH/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 source $ZSH/oh-my-zsh.sh
 $(which k3d) &>> /dev/null
@@ -37,7 +31,7 @@ fi
 
 autoload -U colors && colors
 # check if root
-PS1="%F{cyan}server %(?.%F{green}.%F{red})❯ %f"
+PS1="%F{cyan}serverek %(?.%F{green}.%F{red})❯ %f"
 su=sudo
 if [ "$UID" -eq 0 ]; then
   PS1="%F{cyan}%n %(?.%F{green}.%F{red})❯ %f"
@@ -55,10 +49,12 @@ mkdir -p /tmp/home-tmp
 export DOCKER_BUILDKIT=1
 export EDITOR=nvim
 #kubeconfig
-alias get-all-configs='f(){ v=$(find ~/.k3d/ -maxdepth 1 | tail -n +2 |xargs | sed "s/ /:/g");if [ -z "$v" ]; then;echo "$HOME/.kube/config";export KUBECONFIG=$HOME/.kube/config;else;echo "$v:$HOME/.kube/config";KUBECONFIG="$v:$HOME/.kube/config";fi; }; f'
-export KUBECONFIG=$(get-all-configs)
+# alias get-all-configs='f(){ v=$(find ~/.k3d/ -maxdepth 1 | tail -n +2 |xargs | sed "s/ /:/g");if [ -z "$v" ]; then;echo "$HOME/.kube/config";export KUBECONFIG=$HOME/.kube/config;else;echo "$v:$HOME/.kube/config";KUBECONFIG="$v:$HOME/.kube/config";fi; }; f'
+# export KUBECONFIG=$(get-all-configs)
 export KUBE_CONFIG_FILE=$HOME/.k3d/kubeconfig-k3s-default.yaml
 export LOGGER=dev
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+export SJ_LAST_COMMAND_LOG=""
 
 #aliases----
 eval $(thefuck --alias)
@@ -72,10 +68,10 @@ alias dnff="$su dnf -y"
 alias gst="git status"
 alias gsps="git stash && git pull --rebase && git stash pop"
 # compileDeamon
-alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.sh" -include="*.toml" -color=true -log-prefix=false -command="$1" -command-stop=true; }; f'
-alias ticd='f(){ CompileDaemon -build="" -directory="/home/$USER/timoni" -include="*.sh" -color=true -log-prefix=false -command="/home/$USER/timoni/1/ti-run.sh -command-stop true" -exclude-dir=.git }; f'
+alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.java" -include="*.sh" -include="*.toml" -color=true -log-prefix=false -command="$1" -command-stop=true; }; f'
 # else
 alias cat="bat"
+alias forcoz='go build -ldflags=-compressdwarf=false -gcflags=all="-N -l"'
 alias w="watch -n 1"
 alias k="kubectl"
 alias expl="xdg-open"
@@ -90,6 +86,10 @@ alias upupgo=""
 alias mkdircd='f(){ mkdir -p $1 && cd $1 }; f'
 alias lego="lego --path $HOME"
 alias vim=nvim
+alias amdctl="sudo amdctl"
+alias leh=fuck
+alias tldrf='tldr --list | fzf --preview "tldr {1} --color=always" --preview-window=right,70% | xargs tldr'
+alias fzfv='fzf | xargs nvim'
 # -----------------------------------------------------------------------------
 alias prptmp="cd /tmp/home-tmp && mkdir gotmp; cd gotmp && echo 'package main
 
@@ -97,7 +97,8 @@ func main() {
 	
 }'>> main.go && go mod init test && code ." 
 alias math='f(){ echo "$1" | bc; }; f'
-
+alias sj='f(){ [[ ! -d /tmp/sj ]] && mkdir /tmp/sj;  SJ_LAST_COMMAND_LOG="/tmp/sj/${1}.log";echo "duuu $@"; "$@" &> "/tmp/sj/${1}.log"; [[ ! $? -eq 0 ]] && bat "/tmp/sj/${1}.log"; }; f'
+alias sjlog='[[ ! -z $SJ_LAST_COMMAND_LOG ]] && bat $SJ_LAST_COMMAND_LOG'
 # -----------------------------------------------------------------------------
 
 function cc(){
@@ -153,8 +154,8 @@ add-zsh-hook precmd dupa
 zle -N help
 bindkey '^J' help
 bindkey '^M' help
-bindkey '^ ' autosuggest-accept
-# bindkey '^=' autosuggest-execute
+bindkey '^.' autosuggest-accept
+# bindkey '^0' autosuggest-execute
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

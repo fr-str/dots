@@ -23,7 +23,7 @@ return require('packer').startup(function(use)
     use('tpope/vim-surround')
 
     use('mg979/vim-visual-multi')
-
+    use("fatih/vim-go", {run = ":GoUpdateBinaries"})
 	use {
 		'VonHeikemen/lsp-zero.nvim',
 		requires = {
