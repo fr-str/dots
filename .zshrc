@@ -6,7 +6,6 @@ ZSH_THEME="refined"
 PLUGIN_PATH="${ZSH_CUSTOM1:-$ZSH/custom}/plugins"
 
 plugins=(git kubectl docker sudo history dirhistory alias-tips update-plugin command-not-found)
-# plugins=(git kubectl docker sudo history dirhistory alias-tips update-plugin linus-rants command-not-found)
 
 if [[ ! -d $PLUGIN_PATH ]]; then
   mkdir -p $PLUGIN_PATH
@@ -18,8 +17,8 @@ function installSource(){
 }
 
 
-source $PLUGIN_PATH/autopair/autopair.zsh
-autopair-init
+# source $PLUGIN_PATH/autopair/autopair.zsh
+# autopair-init
 source $PLUGIN_PATH/zsh-autosuggestions/zsh-autosuggestions.zsh
 # source $PLUGIN_PATH/autojump/autojump.zsh
 source $PLUGIN_PATH/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
@@ -128,9 +127,9 @@ parallelRsync() {
         echo "------------------ $dest ------------------"
         cd "$src" &&
         find . -type f -print0 |
-        xargs -0 -P10 -I% rsync -vR "$@" % "$dest";
+        xargs -0 -P10 -I% rsync -PhR "$@" % "$dest";
     ) &&
-    rsync -v "$@" "$src" "$dest"
+    rsync -Ph "$@" "$src" "$dest"
 }
 
 function cc(){
