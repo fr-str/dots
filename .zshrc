@@ -81,7 +81,8 @@ alias code-cleanup="cc"
 alias fix-mod="find . -not -path '*/vendor/*' -name 'go.mod' -printf '%h\n' -execdir sh -c 'go mod tidy; go fmt .' \;"
 alias rr="rm -rf"
 alias upgo="dupa=$(pwd) && cd ~/.update-golang && git pull && $su ~/.update-golang/update-golang.sh && cd $dupa"
-alias upupgo=""
+alias goline='f(){ go build -gcflags="-m $1"}; f'
+alias gobce="go build -gcflags=-d=ssa/check_bce/debug=1"
 alias mkdircd='f(){ mkdir -p $1 && cd $1 }; f'
 alias lego="lego --path $HOME"
 alias vim=nvim
