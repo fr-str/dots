@@ -12,6 +12,13 @@ lsp.configure('sumneko_lua', {
     }
 })
 
+lsp.ensure_installed({
+    "gopls",
+    "lua_ls",
+   "rust_analyzer",
+   "eslint",
+   })
+
 lsp.set_preferences({
     suggest_lsp_servers = false,
     sign_icons = {

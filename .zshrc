@@ -67,7 +67,7 @@ alias dnff="$su dnf -y"
 alias gst="git status"
 alias gsps="git stash && git pull --rebase && git stash pop"
 # compileDeamon
-alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.java" -include="*.sh" -include="*.toml" -color=true -log-prefix=false -command="$1" -command-stop=true; }; f'
+alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.rs" -include="*.java" -include="*.sh" -include="*.toml" -color=true -log-prefix=false -command="$1" -command-stop=true; }; f'
 # else
 alias cat="bat"
 alias forcoz='go build -ldflags=-compressdwarf=false -gcflags=all="-N -l"'
@@ -162,26 +162,17 @@ function help {
     if [[ "$BUFFER" =~ '^(-?\w\s?)+ --help$' ]]; then
         BUFFER="$BUFFER | bat -p -l help"
     fi
-
-    # If contains run, build, make or install, change govenor to performance 
-    if [[ "$BUFFER" =~ $s ]]; then
-        # sudo cpupower frequency-set -g performance > /dev/null
-        # zle accept-line
-    fi
-
+    
     # press enter
     zle accept-line
 }
 
-function dupa() {
-    if [[ last_command=$(fc -ln -1) =~ $s ]]; then
-        # sudo cpupower frequency-set -g powersave > /dev/null
-    fi
+tmux-window-name() {
+	($TMUX_PLUGIN_MANAGER_PATH/tmux-window-name/scripts/rename_session_windows.py &)
 }
 
 autoload -U add-zsh-hook
-add-zsh-hook precmd dupa
-#precmd_functions+=(changeGovernor)
+add-zsh-hook chpwd tmux-window-name
 
 zle -N help
 bindkey '^J' help
