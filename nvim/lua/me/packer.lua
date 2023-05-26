@@ -10,13 +10,27 @@ return require('packer').startup(function(use)
         'nvim-telescope/telescope.nvim', tag = '0.1.0',
         requires = { { 'nvim-lua/plenary.nvim' } }
     }
-    use ({
-    	'patstockwell/vim-monokai-tasty',
-    	config = function()
-    		vim.cmd('colorscheme vim-monokai-tasty')
-    	end
+    use({
+        'patstockwell/vim-monokai-tasty',
+        config = function()
+            vim.cmd('colorscheme vim-monokai-tasty')
+        end
     })
     use('christoomey/vim-tmux-navigator')
+    use { 'zbirenbaum/copilot.lua', cmd = 'Copilot', event = 'InsertEnter', config = function()
+        require("copilot").setup({
+            panel = {
+                auto_refresh = true,
+            },
+            suggestion = {
+                auto_trigger = true,
+            },
+            filetypes = {
+                ["*"] = true,
+            }
+        })
+    end
+    }
     use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
     use('mbbill/undotree')
     use('tpope/vim-fugitive')

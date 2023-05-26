@@ -53,7 +53,7 @@ export EDITOR=nvim
 export KUBE_CONFIG_FILE=$HOME/.k3d/kubeconfig-k3s-default.yaml
 export LOGGER=dev
 export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-export SJ_LAST_COMMAND_LOG=""
+# export SJ_LAST_COMMAND_LOG=""
 
 #aliases----
 eval $(thefuck --alias)
@@ -80,7 +80,7 @@ alias gic="git clone"
 alias code-cleanup="cc"
 alias fix-mod="find . -not -path '*/vendor/*' -name 'go.mod' -printf '%h\n' -execdir sh -c 'go mod tidy; go fmt .' \;"
 alias rr="rm -rf"
-alias upgo="dupa=$(pwd) && cd ~/.update-golang && git pull && $su ~/.update-golang/update-golang.sh && cd $dupa"
+alias upgo="dupa=$PWD && cd ~/.update-golang && git pull && $su ~/.update-golang/update-golang.sh && cd $dupa"
 alias goline='f(){ go build -gcflags="-m $1"}; f'
 alias gobce="go build -gcflags=-d=ssa/check_bce/debug=1"
 alias mkdircd='f(){ mkdir -p $1 && cd $1 }; f'
@@ -98,8 +98,8 @@ func main() {
 	
 }'>> main.go && go mod init test && code ." 
 alias math='f(){ echo "$1" | bc; }; f'
-alias sj='f(){ [[ ! -d /tmp/sj ]] && mkdir /tmp/sj;  SJ_LAST_COMMAND_LOG="/tmp/sj/${1}.log";echo "duuu $@"; "$@" &> "/tmp/sj/${1}.log"; [[ ! $? -eq 0 ]] && bat "/tmp/sj/${1}.log"; }; f'
-alias sjlog='[[ ! -z $SJ_LAST_COMMAND_LOG ]] && bat $SJ_LAST_COMMAND_LOG'
+# alias sj='f(){ [[ ! -d /tmp/sj ]] && mkdir /tmp/sj;  SJ_LAST_COMMAND_LOG="/tmp/sj/${1}.log";echo "duuu $@"; "$@" &> "/tmp/sj/${1}.log"; [[ ! $? -eq 0 ]] && bat "/tmp/sj/${1}.log"; }; f'
+# alias sjlog='[[ ! -z $SJ_LAST_COMMAND_LOG ]] && bat $SJ_LAST_COMMAND_LOG'
 # -----------------------------------------------------------------------------
 
 isremote() {
