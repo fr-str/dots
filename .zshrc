@@ -66,6 +66,7 @@ alias dnff="$su dnf -y"
 # git
 alias gst="git status"
 alias gsps="git stash && git pull --rebase && git stash pop"
+alias lg="lazygit"
 # compileDeamon
 alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.rs" -include="*.java" -include="*.sh" -include="*.toml" -color=true -log-prefix=false -command="$1" -command-stop=true; }; f'
 # else
