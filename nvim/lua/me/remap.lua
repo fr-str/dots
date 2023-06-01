@@ -1,14 +1,14 @@
 vim.g.mapleader = " "
-vim.keymap.set("n","<leader>pv",vim.cmd.Ex)
+vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
 -- TmuxNav
-vim.keymap.set("n","<C-h>","<cmd> TmuxNavigateLeft<CR>")
-vim.keymap.set("n","<C-l>","<cmd> TmuxNavigateRight<CR>")
-vim.keymap.set("n","<C-j>","<cmd> TmuxNavigateDown<CR>")
-vim.keymap.set("n","<C-k>","<cmd> TmuxNavigateUp<CR>")
+vim.keymap.set("n", "<C-h>", "<cmd> TmuxNavigateLeft<CR>")
+vim.keymap.set("n", "<C-l>", "<cmd> TmuxNavigateRight<CR>")
+vim.keymap.set("n", "<C-j>", "<cmd> TmuxNavigateDown<CR>")
+vim.keymap.set("n", "<C-k>", "<cmd> TmuxNavigateUp<CR>")
 
 -- center
 vim.keymap.set("n", "J", "mzJ`z")
@@ -21,14 +21,14 @@ vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("x", "<leader>p", [["_dP]])
 
 -- copy to system cb
-vim.keymap.set({"n", "v"}, "<leader>y", [["+y]])
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
 vim.keymap.set("n", "<leader>Y", [["+Y]])
 
-vim.keymap.set({"n", "v"}, "<leader>d", [["_d]])
+vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 
-vim.keymap.set("i","<C-c>","<Esc>")
+vim.keymap.set("i", "<C-c>", "<Esc>")
 
-vim.keymap.set("n","<leader>f",vim.lsp.buf.format)
+vim.keymap.set("n", "<leader>fb", vim.lsp.buf.format)
 
 
 -- vim.keymap.set("i", "<A-l>", "<Right>")
