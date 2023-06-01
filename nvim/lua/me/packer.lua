@@ -16,7 +16,14 @@ return require('packer').startup(function(use)
             vim.cmd('colorscheme vim-monokai-tasty')
         end
     })
+    use {
+        'nvim-lualine/lualine.nvim',
+        requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+    }
     use('christoomey/vim-tmux-navigator')
+    use { "akinsho/toggleterm.nvim", tag = '*', config = function()
+        require("toggleterm").setup()
+    end }
     use { 'zbirenbaum/copilot.lua', cmd = 'Copilot', event = 'InsertEnter', config = function()
         require("copilot").setup({
             panel = {
@@ -33,7 +40,7 @@ return require('packer').startup(function(use)
     }
     use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
     use('mbbill/undotree')
-    use('tpope/vim-fugitive')
+    -- use('tpope/vim-fugitive')
     use('tpope/vim-commentary')
     use('tpope/vim-surround')
     use('theprimeagen/harpoon')
