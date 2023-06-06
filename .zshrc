@@ -169,7 +169,7 @@ function help {
 }
 
 tmux-window-name() {
-	($TMUX_PLUGIN_MANAGER_PATH/tmux-window-name/scripts/rename_session_windows.py &)
+	($TMUX_PLUGIN_MANAGER_PATH/tmux-window-name/scripts/rename_session_windows.py &> /dev/null &)
 }
 
 autoload -U add-zsh-hook
@@ -179,6 +179,7 @@ zle -N help
 bindkey '^J' help
 bindkey '^M' help
 bindkey '^.' autosuggest-accept
+bindkey '^,' autosuggest-accept
 # bindkey '^0' autosuggest-execute
 
 export NVM_DIR="$HOME/.nvm"

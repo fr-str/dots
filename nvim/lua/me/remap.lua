@@ -29,7 +29,7 @@ vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 vim.keymap.set("i", "<C-c>", "<Esc>")
 
 vim.keymap.set("n", "<leader>fb", vim.lsp.buf.format)
-
+vim.keymap.set("n","<leader>sf", "<cmd>!sql-formatter % --fix<CR>")
 
 -- vim.keymap.set("i", "<A-l>", "<Right>")
 -- vim.keymap.set("i", "<A-h>", "<Left>")

@@ -5,6 +5,7 @@ lsp.preset('recommended')
 lsp.configure('sumneko_lua', {
     settings = {
         Lua = {
+            runtime = {version = 'LuaJIT'},
             diagnostics = {
                 globals = { 'vim' }
             }
@@ -20,7 +21,7 @@ lsp.ensure_installed({
    })
 
 lsp.set_preferences({
-    suggest_lsp_servers = false,
+    -- suggest_lsp_servers = false,
     sign_icons = {
         error = 'E',
         warn = 'W',
