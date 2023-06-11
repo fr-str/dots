@@ -24,6 +24,20 @@ return require('packer').startup(function(use)
     use { "akinsho/toggleterm.nvim", tag = '*', config = function()
         require("toggleterm").setup()
     end }
+
+    use({
+        "jackMort/ChatGPT.nvim",
+        config = function()
+            require("chatgpt").setup({
+                api_key_cmd = "cat ~/.config/nvim/api_key",
+            })
+        end,
+        requires = {
+            "MunifTanjim/nui.nvim",
+            "nvim-lua/plenary.nvim",
+            "nvim-telescope/telescope.nvim"
+        }
+    })
     use { 'zbirenbaum/copilot.lua', cmd = 'Copilot', event = 'InsertEnter', config = function()
         require("copilot").setup({
             panel = {
@@ -38,6 +52,7 @@ return require('packer').startup(function(use)
         })
     end
     }
+
     use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
     use('mbbill/undotree')
     -- use('tpope/vim-fugitive')
