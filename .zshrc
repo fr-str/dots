@@ -178,8 +178,8 @@ add-zsh-hook chpwd tmux-window-name
 zle -N help
 bindkey '^J' help
 bindkey '^M' help
-bindkey '^.' autosuggest-accept
-bindkey '^,' autosuggest-accept
+bindkey -r '^[l'
+bindkey '^[l' autosuggest-accept
 # bindkey '^0' autosuggest-execute
 
 export NVM_DIR="$HOME/.nvm"
