@@ -180,6 +180,7 @@ bindkey '^J' help
 bindkey '^M' help
 bindkey -r '^[l'
 bindkey '^[l' autosuggest-accept
+bindkey "^u" backward-delete-char
 # bindkey '^0' autosuggest-execute
 
 export NVM_DIR="$HOME/.nvm"

@@ -70,7 +70,7 @@ local servers = {
 }
 
 for server, config in pairs(servers) do
-   nvim_lsp[server].setup(config)
+    nvim_lsp[server].setup(config)
 end
 
 
