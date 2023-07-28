@@ -26,66 +26,21 @@ local postfix = require("luasnip.extras.postfix").postfix
 local types = require("luasnip.util.types")
 local parse = require("luasnip.util.parser").parse_snippet
 local ms = ls.multi_snippet
--- local k = require("luasnip.nodes.key_indexer").new_key
--- local cmp = require'cmp'
--- cmp.setup({
---     snippet={
---         expand = function(args)
---             require('luasnip').lsp_expand(args.body)
---         end,
---     },
---     sources = {
---         { name = 'nvim_lsp' },
---         { name = 'luasnip' },
---         { name = 'buffer' },
---         { name = 'path' },
---         { name = 'tmux' },
---     },
--- })
-ls.setup({
-    store_selection_keys = "<Tab>",
-})
 
-
-local function capture(line, trigger)
-    if line == "" then
-        return ""
-    end
-
-    local str = line:sub(1, - #trigger - 1)
-    if str == "" then
-        return ""
-    end
-
-    local lastComponent = ""
-    local x = 0
-    for i = #str, 1, -1 do
-        local char = str:sub(i, i)
-        if not char:match("[a-zA-Z0-9%.%(%)%[%]%{%}%\"]") and x == 0 then
-            return lastComponent
-        end
-
-        if char == ')' or char == ']' then
-            x = x + 1
-        end
-
-        if char == '(' or char == '[' then
-            x = x - 1
-            if x < 0 then
-                return lastComponent
-            end
-        end
-
-        lastComponent = char .. lastComponent
-    end
-
-    return lastComponent
-end
 ls.add_snippets("go", {
     postfix(".str", {
         f(function(_, parent)
             return "string(" .. parent.snippet.env.POSTFIX_MATCH .. ")"
         end, {})
-    }, {}, { match_pattern = "[a-zA-Z0-9%.%(%)%[%]%{%}%\"]+" })
+    }),
+    postfix(".len", {
+        f(function(_, parent)
+            return "len(" .. parent.snippet.env.POSTFIX_MATCH .. ")"
+        end, {})
+    }),
+    postfix(".bytes", {
+        f(function(_, parent)
+            return "[]byte(" .. parent.snippet.env.POSTFIX_MATCH .. ")"
+        end, {})
+    })
 })
---"[a-zA-Z0-9%.%(%)%[%]%{%}%\"]+"
