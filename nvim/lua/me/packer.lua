@@ -49,6 +49,10 @@ return require('packer').startup(function(use)
     })
     use('tpope/vim-commentary')
     use('tpope/vim-surround')
+    use('tpope/vim-dadbod')
+    use('kristijanhusak/vim-dadbod-ui')
+    use('kristijanhusak/vim-dadbod-completion')
+    use('ThePrimeagen/git-worktree.nvim')
     use('theprimeagen/harpoon')
     use {
         'williamboman/mason.nvim',
