@@ -6,6 +6,7 @@ vim.cmd [[packadd packer.nvim]]
 return require('packer').startup(function(use)
     -- Packer can manage itself
     use 'wbthomason/packer.nvim'
+    use { 'ojroques/nvim-osc52' }
     use {
         'nvim-telescope/telescope.nvim', tag = '0.1.0',
         requires = { { 'nvim-lua/plenary.nvim' } }
