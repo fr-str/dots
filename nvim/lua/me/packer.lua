@@ -8,7 +8,7 @@ return require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
     use { 'ojroques/nvim-osc52' }
     use {
-        'nvim-telescope/telescope.nvim', tag = '0.1.0',
+        'nvim-telescope/telescope.nvim', tag = 'master',
         requires = { { 'nvim-lua/plenary.nvim' } }
     }
     use({
@@ -44,7 +44,7 @@ return require('packer').startup(function(use)
     use({
         "fr-str/LuaSnip",
         -- follow latest release.
-        tag = "v1.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+        tag = "master", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
         -- install jsregexp (optional!:).
         run = "make install_jsregexp"
     })
