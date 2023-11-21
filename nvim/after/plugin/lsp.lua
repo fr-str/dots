@@ -1,6 +1,8 @@
 local lsp = require('lsp-zero').preset('recommended')
 local nvim_lsp = require('lspconfig')
 vim.lsp.set_log_level('debug')
+
+
 -- Fix Undefined global 'vim'
 lsp.configure('sumneko_lua', {
     settings = {
@@ -47,7 +49,7 @@ lsp.on_attach(function(client, bufnr)
     vim.keymap.set("n", "<leader>vca", vim.lsp.buf.code_action, opts)
     -- vim.keymap.set("n", "<leader>vrr", vim.lsp.buf.references, opts)
     vim.keymap.set("i", "<M-h>", vim.lsp.buf.signature_help, opts)
---    vim.keymap.set("n", "<leader>bt", vim.lsp.buf_attach_client, opts)
+    --    vim.keymap.set("n", "<leader>bt", vim.lsp.buf_attach_client, opts)
 end)
 
 local servers = {
@@ -73,8 +75,18 @@ for server, config in pairs(servers) do
 end
 
 
-
 lsp.setup()
+local cmp = require('cmp')
+local cmp_action = require('lsp-zero').cmp_action()
+cmp.setup({
+    preselect = cmp.PreselectMode.Item,
+    completion = {
+        completeopt = 'menu,menuone,noinsert'
+    },
+    mapping = cmp.mapping.preset.insert({
+        ['<TAB>'] = cmp.mapping.confirm({ select = true }),
+    }),
+})
 
 vim.diagnostic.config({
     virtual_text = true,
