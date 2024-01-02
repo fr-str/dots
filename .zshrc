@@ -68,7 +68,7 @@ alias gst="git status"
 alias gsps="git stash && git pull --rebase && git stash pop"
 alias lg="lazygit"
 # compileDeamon
-alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.rs" -include="*.html" -include="*.sh" -include="*.toml" -color=true -log-prefix=false -command="$1" -command-stop=true; }; f'
+alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.rs" -include="*.html" -include="*.sh" -include="*.toml" -include="*.zig" -color=true -log-prefix=false -command="$1" -command-stop=true; }; f'
 # else
 find_dirs="\$(find . -type d \( -name '.cache' -o -name 'cache' -o -name '.git' -o -name 'node_modules' \) -prune -o -type d -print 2> /dev/null | fzf)"
 alias vimf="nvim \$(find . -type d \( -name 'node_modules' -o -name '.cache' \) -prune -o -type f -print | fzf)"

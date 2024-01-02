@@ -17,6 +17,15 @@ return require('packer').startup(function(use)
             vim.cmd('colorscheme vim-monokai-tasty')
         end
     })
+    use({
+        "nomnivore/ollama.nvim",
+        config = function()
+            require("ollama").setup({
+                url = "http://192.168.0.100:11434",
+                model = "codellama:latest",
+            })
+        end
+    })
     use {
         'nvim-lualine/lualine.nvim',
         requires = { 'nvim-tree/nvim-web-devicons', opt = true }
