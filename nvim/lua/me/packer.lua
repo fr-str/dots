@@ -92,4 +92,6 @@ return require('packer').startup(function(use)
             { 'rafamadriz/friendly-snippets' },
         }
     }
+
+    use { "chrisgrieser/nvim-chainsaw" }
 end)
