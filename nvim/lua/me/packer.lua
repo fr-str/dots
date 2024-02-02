@@ -70,6 +70,16 @@ return require('packer').startup(function(use)
     }
 
 
+    use { 'folke/trouble.nvim',
+        requires = {
+            { "nvim-tree/nvim-web-devicons" }
+        },
+        config = function()
+            require("trouble").setup ({
+                icons = false,
+            })
+        end
+    }
     use('mg979/vim-visual-multi')
     use("fatih/vim-go", { run = ":GoUpdateBinaries" })
     use {
