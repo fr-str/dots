@@ -2,6 +2,11 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 -- tab size 4
 vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+vim.opt.smartindent = true
+
 vim.g.have_nerd_font = true
 
 vim.opt.number = true
@@ -23,22 +28,16 @@ vim.opt.smartcase = true
 vim.opt.signcolumn = "yes"
 
 vim.opt.updatetime = 250
-
 vim.opt.timeoutlen = 300
 
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
---  See `:help 'list'`
---  and `:help 'listchars'`
--- vim.opt.list = true
--- vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
-
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = "split"
 
 vim.opt.cursorline = true
-
+vim.opt.guicursor = "n-v-c-i:block-Cursor"
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 15
 
@@ -413,15 +412,20 @@ require("lazy").setup({
 			})
 		end,
 	},
-
-	{ -- You can easily change to a different colorscheme.
-		-- Change the name of the colorscheme plugin below, and then
-		-- change the command in the config to whatever the name of that colorscheme is.
-		--
-		-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+	{ -- Collection of various small independent plugins/modules
+		"echasnovski/mini.nvim",
+		config = function()
+			local statusline = require("mini.statusline")
+			statusline.setup({ use_icons = vim.g.have_nerd_font })
+			---@diagnostic disable-next-line: duplicate-set-field
+			statusline.section_location = function()
+				return "%2l:%-2v"
+			end
+		end,
+	},
+	{
 		-- "folke/tokyonight.nvim",
 		"patstockwell/vim-monokai-tasty",
-		-- "ErichDonGubler/vim-sublime-monokai",
 		priority = 1000, -- Make sure to load this before all the other start plugins.
 		init = function()
 			-- vim.cmd.colorscheme("tokyonight-night")
@@ -429,12 +433,12 @@ require("lazy").setup({
 			-- vim.g.vim_monokai_tasty_machine_tint = 1
 			-- vim.g.vim_monokai_tasty_highlight_active_window = 1
 			vim.cmd.colorscheme("vim-monokai-tasty")
-			-- vim.cmd.hi("Comment gui=none")
+			vim.cmd.hi("Comment gui=none")
 			vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 			vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 		end,
 	},
-	-- -- Highlight todo, notes, etc in comments
+	-- Highlight todo, notes, etc in comments
 	-- {
 	-- 	"folke/todo-comments.nvim",
 	-- 	event = "VimEnter",
@@ -491,16 +495,16 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>rl", chain.removeLogs)
 		end,
 	},
-	{
-		"theprimeagen/harpoon",
-		config = function()
-			local mark = require("harpoon.mark")
-			local ui = require("harpoon.ui")
-
-			vim.keymap.set("n", "<leader>a", mark.add_file)
-			vim.keymap.set("n", "<C-e>", ui.toggle_quick_menu)
-		end,
-	},
+	-- {
+	-- 	"theprimeagen/harpoon",
+	-- 	config = function()
+	-- 		local mark = require("harpoon.mark")
+	-- 		local ui = require("harpoon.ui")
+	--
+	-- 		vim.keymap.set("n", "<leader>a", mark.add_file)
+	-- 		vim.keymap.set("n", "<C-e>", ui.toggle_quick_menu)
+	-- 	end,
+	-- },
 	{
 		"zbirenbaum/copilot.lua",
 		cmd = "Copilot",
