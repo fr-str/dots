@@ -208,7 +208,6 @@ require("lazy").setup({
 			end, { desc = "[S]earch [N]eovim files" })
 		end,
 	},
-
 	{ -- LSP Configuration & Plugins
 		"neovim/nvim-lspconfig",
 		dependencies = {
@@ -424,16 +423,16 @@ require("lazy").setup({
 		end,
 	},
 	{
-		-- "folke/tokyonight.nvim",
-		"patstockwell/vim-monokai-tasty",
+		"folke/tokyonight.nvim",
+		-- "patstockwell/vim-monokai-tasty",
 		priority = 1000, -- Make sure to load this before all the other start plugins.
 		init = function()
-			-- vim.cmd.colorscheme("tokyonight-night")
+			vim.cmd.colorscheme("tokyonight-night")
 			-- vim.g.vim_monokai_tasty_italic = 1
 			-- vim.g.vim_monokai_tasty_machine_tint = 1
 			-- vim.g.vim_monokai_tasty_highlight_active_window = 1
-			vim.cmd.colorscheme("vim-monokai-tasty")
-			vim.cmd.hi("Comment gui=none")
+			-- vim.cmd.colorscheme("vim-monokai-tasty")
+			-- vim.cmd.hi("Comment gui=none")
 			vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 			vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 		end,
@@ -495,16 +494,16 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>rl", chain.removeLogs)
 		end,
 	},
-	-- {
-	-- 	"theprimeagen/harpoon",
-	-- 	config = function()
-	-- 		local mark = require("harpoon.mark")
-	-- 		local ui = require("harpoon.ui")
-	--
-	-- 		vim.keymap.set("n", "<leader>a", mark.add_file)
-	-- 		vim.keymap.set("n", "<C-e>", ui.toggle_quick_menu)
-	-- 	end,
-	-- },
+	{
+		"theprimeagen/harpoon",
+		config = function()
+			local mark = require("harpoon.mark")
+			local ui = require("harpoon.ui")
+
+			vim.keymap.set("n", "<leader>a", mark.add_file)
+			vim.keymap.set("n", "<C-e>", ui.toggle_quick_menu)
+		end,
+	},
 	{
 		"zbirenbaum/copilot.lua",
 		cmd = "Copilot",
@@ -610,6 +609,8 @@ require("lazy").setup({
 			vim.keymap.set("n", "<C-k>", "<cmd> TmuxNavigateUp<CR>")
 		end,
 	},
+	{ "tpope/vim-surround" },
+	{ "fatih/vim-go" },
 }, {
 	ui = {
 		-- If you are using a Nerd Font: set icons to an empty table which will use the
