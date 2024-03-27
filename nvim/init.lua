@@ -368,6 +368,26 @@ require("lazy").setup({
 			local cmp = require("cmp")
 			local luasnip = require("luasnip")
 			luasnip.config.setup({})
+			require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
+			local postfix = require("luasnip.extras.postfix").postfix
+
+			luasnip.add_snippets("go", {
+				postfix(".str", {
+					luasnip.function_node(function(_, parent)
+						return "string(" .. parent.snippet.env.POSTFIX_MATCH .. ")"
+					end, {}),
+				}),
+				postfix(".len", {
+					luasnip.function_node(function(_, parent)
+						return "len(" .. parent.snippet.env.POSTFIX_MATCH .. ")"
+					end, {}),
+				}),
+				postfix(".bytes", {
+					luasnip.function_node(function(_, parent)
+						return "[]byte(" .. parent.snippet.env.POSTFIX_MATCH .. ")"
+					end, {}),
+				}),
+			})
 
 			cmp.setup({
 				snippet = {
@@ -438,12 +458,12 @@ require("lazy").setup({
 		end,
 	},
 	-- Highlight todo, notes, etc in comments
-	-- {
-	-- 	"folke/todo-comments.nvim",
-	-- 	event = "VimEnter",
-	-- 	dependencies = { "nvim-lua/plenary.nvim" },
-	-- 	opts = { signs = false },
-	-- },
+	{
+		"folke/todo-comments.nvim",
+		event = "VimEnter",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		opts = { signs = false },
+	},
 	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
@@ -476,19 +496,19 @@ require("lazy").setup({
 	},
 	{
 		"chrisgrieser/nvim-chainsaw",
-		opts = {
-			marker = "[dupa]",
-			logStatements = {
-				variableLog = {
-					go = 'fmt.Println("%s %s: ",%s)',
-				},
-				objectLog = {
-					go = '/*%s*/b,_:=json.MarshalIndent(%s,""," ");fmt.Println(string(b))//[dupa]',
-				},
-			},
-		},
 		config = function()
 			local chain = require("chainsaw")
+			chain.setup({
+				marker = "[dupa]",
+				logStatements = {
+					variableLog = {
+						go = 'fmt.Println("%s %s: ",%s)',
+					},
+					objectLog = {
+						go = '/*%s*/b,_:=json.MarshalIndent(%s,""," ");fmt.Println(string(b))//[dupa]',
+					},
+				},
+			})
 			vim.keymap.set("n", "<leader>ol", chain.objectLog)
 			vim.keymap.set("n", "<leader>vl", chain.variableLog)
 			vim.keymap.set("n", "<leader>rl", chain.removeLogs)
