@@ -272,11 +272,6 @@ require("lazy").setup({
 			local servers = {
 				clangd = {},
 				gopls = {},
-				-- pyright = {},
-				-- rust_analyzer = {},
-				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-				-- But for many setups, the LSP (`tsserver`) will work just fine
-				-- tsserver = {},
 
 				lua_ls = {
 					-- cmd = {...},
@@ -406,7 +401,8 @@ require("lazy").setup({
 					["<C-p>"] = cmp.mapping.select_prev_item(),
 					["<C-b>"] = cmp.mapping.scroll_docs(-4),
 					["<C-f>"] = cmp.mapping.scroll_docs(4),
-					["<C-y>"] = cmp.mapping.confirm({ select = true }),
+					-- ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+					["<C-k>"] = cmp.mapping.confirm({ select = true }),
 					["<C-Space>"] = cmp.mapping.complete({}),
 
 					["<C-l>"] = cmp.mapping(function()
