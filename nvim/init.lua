@@ -57,6 +57,8 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
+-- backspace
+vim.keymap.set("i", "<C-u>", "<BS>")
 -- void paste
 vim.keymap.set("x", "<leader>p", [["_dP]])
 vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
@@ -499,15 +501,16 @@ require("lazy").setup({
 				logStatements = {
 					variableLog = {
 						go = 'fmt.Println("%s %s: ",%s)',
+						zig = 'std.debug.print("%s %s: {any}\\n",.{%s});',
 					},
 					objectLog = {
 						go = '/*%s*/b,_:=json.MarshalIndent(%s,""," ");fmt.Println(string(b))//[dupa]',
 					},
 				},
 			})
-			vim.keymap.set("n", "<leader>ol", chain.objectLog)
-			vim.keymap.set("n", "<leader>vl", chain.variableLog)
-			vim.keymap.set("n", "<leader>rl", chain.removeLogs)
+			vim.keymap.set({ "n", "v" }, "<leader>ol", chain.objectLog)
+			vim.keymap.set({ "n", "v" }, "<leader>vl", chain.variableLog)
+			vim.keymap.set({ "n", "v" }, "<leader>rl", chain.removeLogs)
 		end,
 	},
 	{
@@ -530,7 +533,7 @@ require("lazy").setup({
 					auto_refresh = true,
 				},
 				suggestion = {
-					auto_trigger = true,
+					auto_trigger = false,
 				},
 				filetypes = {
 					["*"] = true,
