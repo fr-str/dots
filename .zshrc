@@ -64,7 +64,6 @@ alias aptt="$su apt -y"
 # fedora
 alias dnff="$su dnf -y"
 # git
-alias gst="git status"
 alias gsps="git stash && git pull --rebase && git stash pop"
 alias lg="lazygit"
 # compileDeamon
@@ -85,14 +84,12 @@ alias gic="git clone"
 alias code-cleanup="cc"
 alias fix-mod="find . -not -path '*/vendor/*' -name 'go.mod' -printf '%h\n' -execdir sh -c 'go mod tidy; go fmt .' \;"
 alias rr="rm -rf"
-alias upgo="dupa=$PWD && cd ~/.update-golang && git pull && $su ~/.update-golang/update-golang.sh && cd $dupa"
+alias upgo='dupa=$PWD && cd ~/.update-golang && git pull && $su ~/.update-golang/update-golang.sh && cd $dupa'
 alias goline='f(){ go build -gcflags="-m $1"}; f'
 alias gobce="go build -gcflags=-d=ssa/check_bce/debug=1"
 alias mkdircd='f(){ mkdir -p $1 && cd $1 }; f'
 alias lego="lego --path $HOME"
 alias vim=nvim
-alias amdctl="sudo amdctl"
-alias leh=fuck
 alias tldrf='tldr --list | fzf --preview "tldr {1} --color=always" --preview-window=right,70% | xargs tldr'
 alias fzfv='fzf | xargs nvim'
 alias prsync='parallelRsync $@'
