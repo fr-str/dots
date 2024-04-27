@@ -50,6 +50,7 @@ vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next [D]iagn
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show diagnostic [E]rror messages" })
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>nt", "<cmd>NvimTreeToggle<CR>")
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("n", "J", "mzJ`z")
@@ -379,6 +380,32 @@ require("lazy").setup({
 						return "len(" .. parent.snippet.env.POSTFIX_MATCH .. ")"
 					end, {}),
 				}),
+				postfix(".int", {
+					luasnip.function_node(function(_, parent)
+						return "int(" .. parent.snippet.env.POSTFIX_MATCH .. ")"
+					end, {}),
+				}),
+
+				postfix(".int64", {
+					luasnip.function_node(function(_, parent)
+						return "int64(" .. parent.snippet.env.POSTFIX_MATCH .. ")"
+					end, {}),
+				}),
+				postfix(".int32", {
+					luasnip.function_node(function(_, parent)
+						return "int32(" .. parent.snippet.env.POSTFIX_MATCH .. ")"
+					end, {}),
+				}),
+				postfix(".int16", {
+					luasnip.function_node(function(_, parent)
+						return "int16(" .. parent.snippet.env.POSTFIX_MATCH .. ")"
+					end, {}),
+				}),
+				postfix(".int8", {
+					luasnip.function_node(function(_, parent)
+						return "int8(" .. parent.snippet.env.POSTFIX_MATCH .. ")"
+					end, {}),
+				}),
 				postfix(".bytes", {
 					luasnip.function_node(function(_, parent)
 						return "[]byte(" .. parent.snippet.env.POSTFIX_MATCH .. ")"
@@ -442,15 +469,9 @@ require("lazy").setup({
 	},
 	{
 		"folke/tokyonight.nvim",
-		-- "patstockwell/vim-monokai-tasty",
 		priority = 1000, -- Make sure to load this before all the other start plugins.
 		init = function()
 			vim.cmd.colorscheme("tokyonight-night")
-			-- vim.g.vim_monokai_tasty_italic = 1
-			-- vim.g.vim_monokai_tasty_machine_tint = 1
-			-- vim.g.vim_monokai_tasty_highlight_active_window = 1
-			-- vim.cmd.colorscheme("vim-monokai-tasty")
-			-- vim.cmd.hi("Comment gui=none")
 			vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 			vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 		end,
@@ -636,7 +657,43 @@ require("lazy").setup({
 			"nvim-tree/nvim-web-devicons",
 		},
 		config = function()
-			require("nvim-tree").setup({})
+			local nvim_tree = require("nvim-tree")
+			local api = require("nvim-tree.api")
+
+			local function edit_or_open()
+				local node = api.tree.get_node_under_cursor()
+
+				if node.nodes ~= nil then
+					-- expand or collapse folder
+					api.node.open.edit()
+				else
+					-- open file
+					api.node.open.edit()
+					-- Close the tree if file was opened
+					api.tree.close()
+				end
+			end
+
+			nvim_tree.setup({
+				on_attach = function(bufnr)
+					api.config.mappings.default_on_attach(bufnr)
+					local function opts(desc)
+						return {
+							desc = "nvim-tree: " .. desc,
+							buffer = bufnr,
+							noremap = true,
+							silent = true,
+							nowait = true,
+						}
+					end
+					vim.keymap.set("n", "l", edit_or_open, opts("Edit Or Open"))
+					vim.keymap.set("n", "h", api.tree.close, opts("Close"))
+					vim.keymap.set("n", "H", api.tree.collapse_all, opts("Collapse All"))
+				end,
+				filters = {
+					dotfiles = true,
+				},
+			})
 		end,
 	},
 	{ "tpope/vim-surround" },
@@ -676,7 +733,7 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>gat", "<cmd>lua goTag(true)<CR>")
 			vim.keymap.set("n", "<leader>gts", "<cmd>GoTestSum<CR>")
 			vim.keymap.set("n", "<leader>ger", "<cmd>GoIfErr<CR>")
-			vim.keymap.set("n", "<leader>gs", "<cmd>GoFillStruct<CR>")
+			vim.keymap.set("n", "<leader>gfs", "<cmd>GoFillStruct<CR>")
 		end,
 		event = { "CmdlineEnter" },
 		ft = { "go", "gomod" },
