@@ -640,7 +640,48 @@ require("lazy").setup({
 		end,
 	},
 	{ "tpope/vim-surround" },
-	{ "fatih/vim-go" },
+	{
+		"ray-x/go.nvim",
+		dependencies = { -- optional packages
+			"ray-x/guihua.lua",
+			"neovim/nvim-lspconfig",
+			"nvim-treesitter/nvim-treesitter",
+		},
+		config = function()
+			local go = require("go")
+			go.setup({
+				lsp_inlay_hints = {
+					enable = true,
+				},
+			})
+			local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
+			vim.api.nvim_create_autocmd("BufWritePre", {
+				pattern = "*.go",
+				callback = function()
+					require("go.format").goimports()
+				end,
+				group = format_sync_grp,
+			})
+
+			function goTag(add)
+				local tag = vim.fn.input("Enter tag: ")
+				if add then
+					vim.cmd("GoAddTag " .. tag)
+				else
+					vim.cmd("GoRmTag " .. tag)
+				end
+			end
+
+			vim.keymap.set("n", "<leader>grt", "<cmd>lua goTag(false)<CR>")
+			vim.keymap.set("n", "<leader>gat", "<cmd>lua goTag(true)<CR>")
+			vim.keymap.set("n", "<leader>gts", "<cmd>GoTestSum<CR>")
+			vim.keymap.set("n", "<leader>ger", "<cmd>GoIfErr<CR>")
+			vim.keymap.set("n", "<leader>gs", "<cmd>GoFillStruct<CR>")
+		end,
+		event = { "CmdlineEnter" },
+		ft = { "go", "gomod" },
+		build = ':lua require("go.install").update_all_sync()',
+	},
 }, {
 	ui = {
 		-- If you are using a Nerd Font: set icons to an empty table which will use the

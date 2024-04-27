@@ -92,7 +92,7 @@ alias lego="lego --path $HOME"
 alias vim=nvim
 alias tldrf='tldr --list | fzf --preview "tldr {1} --color=always" --preview-window=right,70% | xargs tldr'
 alias fzfv='fzf | xargs nvim'
-alias prsync='parallelRsync $@'
+alias notes='vim ~/.notes'
 # -----------------------------------------------------------------------------
 alias prptmp="cd /tmp/home-tmp && mkdir gotmp; cd gotmp && echo 'package main
 
@@ -104,36 +104,6 @@ alias math='f(){ echo "$1" | bc; }; f'
 # alias sjlog='[[ ! -z $SJ_LAST_COMMAND_LOG ]] && bat $SJ_LAST_COMMAND_LOG'
 # -----------------------------------------------------------------------------
 
-isremote() {
-    [[ "${1%%/*}" == *: ]] || [[ "${1%%~*}" == *: ]]
-}
-
-remoteTildeExpansion() {
-    local expanded_path
-    
-    # Expand the tilde (~) to the home directory of the remote host if it is present in the path
-    if [[ "$1" == *"~"* ]]; then
-        expanded_path="${1/\~/$(ssh "${1%%:*}" 'echo $HOME')}"
-    else
-        expanded_path="$1"
-    fi
-    
-    echo $expanded_path
-}
-parallelRsync() {
-    local src="$1" dest="$2"
-    shift 2 || { echo "missing arguments" >&2; return 1; }
-    isremote "$src" && { echo "cannot handle remote source" >&2; return 1; }
-    (
-        isremote "$dest" && [[ ! "$dest" == /* ]] && dest=$(remoteTildeExpansion "$dest")
-        [[ "$src" == */ ]] || dest="$dest/${src##*/}"
-        echo "------------------ $dest ------------------"
-        cd "$src" &&
-        find . -type f -print0 |
-        xargs -0 -P10 -I% rsync -PhR "$@" % "$dest";
-    ) &&
-    rsync -Ph "$@" "$src" "$dest"
-}
 
 function cc(){
   git fetch --prune
