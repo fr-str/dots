@@ -1,5 +1,12 @@
 {
-    "Print line": {
+	"print": {
+		"prefix": "fp",
+		"body": [
+			"fmt.Println($1)$0"
+		],
+		"description": "Print line"
+	},
+	"Print line": {
 		"prefix": "pl",
 		"body": [
 			"fmt.Println(\"-------------------------\",$1,\"-------------------------\")$0"
@@ -23,7 +30,7 @@
 	"Print json": {
 		"prefix": "pj",
 		"body": [
-			"log.PrintJSON(${1:obj})"
+			"util.PrintJSON(${1:obj})"
 		],
 		"description": "Print json"
 	},
@@ -33,13 +40,6 @@
 			"time.Sleep($1* time.Second)"
 		],
 		"description": "sleep"
-	},
-	"syslog": {
-		"prefix": "syslog",
-		"body": [
-			"log \"logger\""
-		],
-		"description": "logger"
 	},
 	"pprofHeap": {
 		"prefix": "pprofHeap",
@@ -118,31 +118,31 @@
 			"    w.Write([]byte(s))",
 			"}",
 			"http.HandleFunc(\"/cpu\", pprofSvgCpu)"
-  ]
-},
+		]
+	},
 	"dupa": {
 		"prefix": "dupa",
 		"body": [
-		"func dupa() {",
-		"    for {",
-		"        //\\033[38;5;30m",
-		"        fmt.Print(\"\\033[?25l\\033[H\\033[2J\")",
-		"        fmt.Println(\"${1:Name} len:\", ${1:Name}.Len())",
-		"        fmt.Println(\"\")",
-		"        sm := safe.SortedMap[${2:type}, ${3:type}]{",
-		"            Map: *${1:Name}.Copy(),",
-		"        }",
-		"        for i := range sm.Iter() {",
-		"            fmt.Printf(\"${1:Name} %s: %d\", i.Key, len(i.Value.Debug()))",
-		"        }",
-		"        fmt.Println(\"\")",
-		"        fmt.Println(\"Clients:\", $4)",
-		"        fmt.Println(\"TotalMessages:\", $5)",
-		"        fmt.Println(\"Goroutines:\", runtime.NumGoroutine())",
-		"        fmt.Println(\"time:\", strings.Split(time.Now().String(), \"=\")[1])",
-		"        time.Sleep(100 * time.Millisecond)",
-		"    }",
-		"}"
+			"func dupa() {",
+			"    for {",
+			"        //\\033[38;5;30m",
+			"        fmt.Print(\"\\033[?25l\\033[H\\033[2J\")",
+			"        fmt.Println(\"${1:Name} len:\", ${1:Name}.Len())",
+			"        fmt.Println(\"\")",
+			"        sm := safe.SortedMap[${2:type}, ${3:type}]{",
+			"            Map: *${1:Name}.Copy(),",
+			"        }",
+			"        for i := range sm.Iter() {",
+			"            fmt.Printf(\"${1:Name} %s: %d\", i.Key, len(i.Value.Debug()))",
+			"        }",
+			"        fmt.Println(\"\")",
+			"        fmt.Println(\"Clients:\", $4)",
+			"        fmt.Println(\"TotalMessages:\", $5)",
+			"        fmt.Println(\"Goroutines:\", runtime.NumGoroutine())",
+			"        fmt.Println(\"time:\", strings.Split(time.Now().String(), \"=\")[1])",
+			"        time.Sleep(100 * time.Millisecond)",
+			"    }",
+			"}"
 		],
 		"description": "1"
 	},
@@ -168,70 +168,70 @@
 		"description": ""
 	},
 	"action": {
-  "prefix": "action",
-  "body": [
-    "type $1 struct {",
-    "\tID string",
-    "}",
-    "",
-    "// $1 Handler",
-    "// Handles creation, listing and removal of $1 objects",
-    "//",
-    "// @Name $1",
-    "// @Action new $1.New",
-    "// @Action list $1.List",
-    "// @Action update $1.Update",
-    "// @Action delete $1.Delete",
-    "// @Returns nil",
-    "func (a *$1) Handle(r *ws.Request) *ws.Response {",
-    "\tact := strings.TrimPrefix(r.Action, \"$2.\")",
-    "\tswitch act {",
-    "\tcase \"new\":",
-    "\t\treturn a.New(r)",
-    "\tcase \"update\":",
-    "\t\treturn a.Update(r)",
-    "\tcase \"list\":",
-    "\t\treturn a.List(r)",
-    "\tcase \"delete\":",
-    "\t\treturn a.Delete(r)",
-    "\tdefault:",
-    "\t\treturn ws.ActionNotFound(r, act)",
-    "\t}",
-    "}",
-    "",
-    "func (a *$1) New(r *ws.Request) *ws.Response    { ",
-    "\treturn ws.Ok(r,nil) ",
-    "}",
-    "",
-    "func (a *$1) List(r *ws.Request) *ws.Response   { ",
-    "\treturn ws.Ok(r,nil) ",
-    "}",
-    "",
-    "func (a *$1) Update(r *ws.Request) *ws.Response { ",
-    "\treturn ws.Ok(r,nil) ",
-    "}",
-    "",
-    "func (a *$1) Delete(r *ws.Request) *ws.Response { ",
-    "\treturn ws.Ok(r,nil) ",
-    "}"
-  ]
-},
+		"prefix": "action",
+		"body": [
+			"type $1 struct {",
+			"\tID string",
+			"}",
+			"",
+			"// $1 Handler",
+			"// Handles creation, listing and removal of $1 objects",
+			"//",
+			"// @Name $1",
+			"// @Action new $1.New",
+			"// @Action list $1.List",
+			"// @Action update $1.Update",
+			"// @Action delete $1.Delete",
+			"// @Returns nil",
+			"func (a *$1) Handle(r *ws.Request) *ws.Response {",
+			"\tact := strings.TrimPrefix(r.Action, \"$2.\")",
+			"\tswitch act {",
+			"\tcase \"new\":",
+			"\t\treturn a.New(r)",
+			"\tcase \"update\":",
+			"\t\treturn a.Update(r)",
+			"\tcase \"list\":",
+			"\t\treturn a.List(r)",
+			"\tcase \"delete\":",
+			"\t\treturn a.Delete(r)",
+			"\tdefault:",
+			"\t\treturn ws.ActionNotFound(r, act)",
+			"\t}",
+			"}",
+			"",
+			"func (a *$1) New(r *ws.Request) *ws.Response    { ",
+			"\treturn ws.Ok(r,nil) ",
+			"}",
+			"",
+			"func (a *$1) List(r *ws.Request) *ws.Response   { ",
+			"\treturn ws.Ok(r,nil) ",
+			"}",
+			"",
+			"func (a *$1) Update(r *ws.Request) *ws.Response { ",
+			"\treturn ws.Ok(r,nil) ",
+			"}",
+			"",
+			"func (a *$1) Delete(r *ws.Request) *ws.Response { ",
+			"\treturn ws.Ok(r,nil) ",
+			"}"
+		]
+	},
 	"log info": {
-	  "prefix": "li",
-	  "body": [
-	    "log.Info($1)"
-	  ]
+		"prefix": "li",
+		"body": [
+			"log.Info($1)"
+		]
 	},
 	"log error": {
-	  "prefix": "le",
-	  "body": [
-	    "log.Error($1)"
-	  ]
+		"prefix": "le",
+		"body": [
+			"log.Error($1)"
+		]
 	},
 	"log debug": {
-	  "prefix": "ld",
-	  "body": [
-	    "log.Debug($1)"
-	  ]
+		"prefix": "ld",
+		"body": [
+			"log.Debug($1)"
+		]
 	}
 }

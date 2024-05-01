@@ -48,7 +48,7 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous [D]iagnostic message" })
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next [D]iagnostic message" })
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show diagnostic [E]rror messages" })
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+-- vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 vim.keymap.set("n", "<leader>nt", "<cmd>NvimTreeToggle<CR>")
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
@@ -227,6 +227,11 @@ require("lazy").setup({
 			{ "folke/neodev.nvim", opts = {} },
 		},
 		config = function()
+			vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers["signature_help"], {
+				-- border = "single",
+				close_events = { "CursorMoved", "BufHidden" },
+			})
+			vim.keymap.set("i", "<c-s>", vim.lsp.buf.signature_help)
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
 				callback = function(event)
@@ -244,6 +249,7 @@ require("lazy").setup({
 						require("telescope.builtin").lsp_dynamic_workspace_symbols,
 						"[W]orkspace [S]ymbols"
 					)
+
 					map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
 					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 					map("K", vim.lsp.buf.hover, "Hover Documentation")
@@ -261,6 +267,12 @@ require("lazy").setup({
 							callback = vim.lsp.buf.clear_references,
 						})
 					end
+
+					-- if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+					-- 	map("<leader>th", function()
+					-- 		vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+					-- 	end, "[T]oggle Inlay [H]ints")
+					-- end
 				end,
 			})
 
@@ -432,7 +444,7 @@ require("lazy").setup({
 					["<C-f>"] = cmp.mapping.scroll_docs(4),
 					-- ["<C-y>"] = cmp.mapping.confirm({ select = true }),
 					["<C-k>"] = cmp.mapping.confirm({ select = true }),
-					["<C-Space>"] = cmp.mapping.complete({}),
+					["<M-k>"] = cmp.mapping.complete({}),
 
 					["<C-l>"] = cmp.mapping(function()
 						if luasnip.expand_or_locally_jumpable() then
@@ -632,7 +644,7 @@ require("lazy").setup({
 			require("trouble").setup({
 				icons = false,
 			})
-			vim.keymap.set("n", "<leader>tt", function()
+			vim.keymap.set("n", "<leader>q", function()
 				require("trouble").toggle()
 			end)
 			vim.keymap.set("n", "gR", function()
@@ -698,46 +710,22 @@ require("lazy").setup({
 	},
 	{ "tpope/vim-surround" },
 	{
-		"ray-x/go.nvim",
-		dependencies = { -- optional packages
-			"ray-x/guihua.lua",
-			"neovim/nvim-lspconfig",
-			"nvim-treesitter/nvim-treesitter",
-		},
+		"faith/vim-go",
 		config = function()
-			local go = require("go")
-			go.setup({
-				lsp_inlay_hints = {
-					enable = true,
-				},
-			})
-			local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
-			vim.api.nvim_create_autocmd("BufWritePre", {
-				pattern = "*.go",
-				callback = function()
-					require("go.format").goimports()
-				end,
-				group = format_sync_grp,
-			})
-
-			function goTag(add)
+			function GoTag(add)
 				local tag = vim.fn.input("Enter tag: ")
 				if add then
-					vim.cmd("GoAddTag " .. tag)
+					vim.cmd("GoAddTags " .. tag)
 				else
-					vim.cmd("GoRmTag " .. tag)
+					vim.cmd("GoRemoveTags " .. tag)
 				end
 			end
-
-			vim.keymap.set("n", "<leader>grt", "<cmd>lua goTag(false)<CR>")
-			vim.keymap.set("n", "<leader>gat", "<cmd>lua goTag(true)<CR>")
+			vim.keymap.set("n", "<leader>grt", "<cmd>lua GoTag(false)<CR>")
+			vim.keymap.set("n", "<leader>gat", "<cmd>lua GoTag(true)<CR>")
 			vim.keymap.set("n", "<leader>gts", "<cmd>GoTestSum<CR>")
 			vim.keymap.set("n", "<leader>ger", "<cmd>GoIfErr<CR>")
 			vim.keymap.set("n", "<leader>gfs", "<cmd>GoFillStruct<CR>")
 		end,
-		event = { "CmdlineEnter" },
-		ft = { "go", "gomod" },
-		build = ':lua require("go.install").update_all_sync()',
 	},
 }, {
 	ui = {
