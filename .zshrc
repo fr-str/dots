@@ -73,6 +73,7 @@ find_dirs="\$(find . -type d \( -name '.cache' -o -name 'cache' -o -name '.git' 
 alias vimf="nvim \$(find . -type d \( -name 'node_modules' -o -name '.cache' \) -prune -o -type f -print | fzf)"
 alias cdw="cd $HOME/code && cd $find_dirs"
 alias cdf="cd $find_dirs"
+alias ff='f(){ find . -type d \( -name "node_modules" -o -name ".cache" \) -prune -o -type f -name $1 -print | fzf;}; f'
 alias cat="bat"
 alias forcoz='go build -ldflags=-compressdwarf=false -gcflags=all="-N -l"'
 alias w="watch -n 1"
