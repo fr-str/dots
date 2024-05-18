@@ -27,6 +27,12 @@ $(which k3d) &>> /dev/null
 if [[  $? -eq 0 ]]; then 
   source <(k3d completion zsh)
 fi
+# $(which k3d) &>> /dev/null
+# if [[  $? -eq 0 ]]; then 
+#   source <(k3d completion zsh)
+# fi
+
+eval "$(fzf --zsh)"
 
 autoload -U colors && colors
 # check if root
