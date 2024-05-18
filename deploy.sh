@@ -1,0 +1,52 @@
+#!/bin/env bash
+set -e
+log() {
+    echo $(date +%FT%TZ): $@  
+} 
+log "Starting deployment..."
+log "Building server..."
+CGO_ENABLED=0 go build .
+
+APP="$1"
+if [ -z "$APP" ]; then
+    echo "Usage: $0 <app>"
+    exit 1
+fi
+
+
+# git pull 
+BUILD_VERSION=$(git rev-parse HEAD)
+
+log "Releasing new '$APP' version. $BUILD_VERSION"
+log "Running build..."
+docker compose rm -f 
+docker compose build
+
+# scale to 2 instances
+OLD_CONTAINER=$(docker ps -aqf "name=$APP")
+log "Scaling '$APP' up..."
+BUILD_VERSION=$BUILD_VERSION docker compose up -d --no-deps --scale "$APP"=2 --no-recreate "$APP" 
+
+SLEEP_TIME=10
+log "waiting ${SLEEP_TIME}s for new container to startup"
+sleep $SLEEP_TIME
+
+log "checking new container..."
+docker ps -aqf "name=$APP" | head -n 1 | xargs -I{} docker exec {} curl -si localhost:8080
+if [ $? -ne 0 ]; then
+    log "New container is not responding. Exiting..."
+    exit 1
+fi
+log "new contaier OK"
+
+log "Scaling old server down..."
+
+docker container rm -f $OLD_CONTAINER
+docker compose up -d --no-deps --scale "$APP"=1 --no-recreate "$APP"
+
+docker logs -f $(docker ps -aqf "name=$APP")
+# log "reloading caddy"
+# CADDY_CONTAINER=$(docker ps -aqf "name=everything-caddy")
+# docker exec $CADDY_CONTAINER caddy fmt --overwrite /etc/caddy/Caddyfile
+# docker exec $CADDY_CONTAINER caddy reload -c /etc/caddy/Caddyfile
+
