@@ -53,6 +53,9 @@ mkdir -p /tmp/home-tmp
 #env
 export DOCKER_BUILDKIT=1
 export EDITOR=nvim
+# Use bat for man
+export MANPAGER="sh -c 'col -bx | bat -l man -p'";
+export MANROFFOPT="-c";
 #kubeconfig
 # alias get-all-configs='f(){ v=$(find ~/.k3d/ -maxdepth 1 | tail -n +2 |xargs | sed "s/ /:/g");if [ -z "$v" ]; then;echo "$HOME/.kube/config";export KUBECONFIG=$HOME/.kube/config;else;echo "$v:$HOME/.kube/config";KUBECONFIG="$v:$HOME/.kube/config";fi; }; f'
 # export KUBECONFIG=$(get-all-configs)
@@ -71,7 +74,9 @@ alias aptt="$su apt -y"
 alias dnff="$su dnf -y"
 # git
 alias gsps="git stash && git pull --rebase && git stash pop"
-alias lg="lazygit"
+alias lzg="lazygit"
+alias lzd="lazydocker"
+alias lzk="lazykube"
 # compileDeamon
 alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.rs" -include="*.html" -include="*.sh" -include="*.toml" -include="*.zig" -color=true -log-prefix=false -command="$1" -command-stop=true; }; f'
 # else
@@ -100,6 +105,7 @@ alias vim=nvim
 alias tldrf='tldr --list | fzf --preview "tldr {1} --color=always" --preview-window=right,70% | xargs tldr'
 alias fzfv='fzf | xargs nvim'
 alias notes='vim ~/.notes'
+alias mult="sed -e 's/, \"/,\n\t\"/g' -e 's/{/{\n\t/g' -e 's/\}/\n}/g'"
 # -----------------------------------------------------------------------------
 alias prptmp="cd /tmp/home-tmp && mkdir gotmp; cd gotmp && echo 'package main
 
