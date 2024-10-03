@@ -589,7 +589,7 @@ require("lazy").setup({
 	},
 	{
 		"akinsho/toggleterm.nvim",
-		tag = "master",
+		version = "*",
 		config = function()
 			require("toggleterm").setup()
 			local Terminal = require("toggleterm.terminal").Terminal
@@ -705,7 +705,7 @@ require("lazy").setup({
 	},
 	{ "tpope/vim-surround" },
 	{
-		"faith/vim-go",
+		"fatih/vim-go",
 		config = function()
 			function GoTag(add)
 				local tag = vim.fn.input("Enter tag: ")
