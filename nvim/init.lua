@@ -283,9 +283,9 @@ require("lazy").setup({
 			local servers = {
 				clangd = {},
 				gopls = {
-					--       settings = {
-					-- gopls = { gofumpt = true },
-					-- }
+					settings = {
+						gopls = { gofumpt = true },
+					},
 				},
 
 				lua_ls = {
