@@ -23,14 +23,6 @@ source $PLUGIN_PATH/zsh-autosuggestions/zsh-autosuggestions.zsh
 # source $PLUGIN_PATH/autojump/autojump.zsh
 source $PLUGIN_PATH/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 source $ZSH/oh-my-zsh.sh
-$(which k3d) &>> /dev/null
-if [[  $? -eq 0 ]]; then 
-  source <(k3d completion zsh)
-fi
-# $(which k3d) &>> /dev/null
-# if [[  $? -eq 0 ]]; then 
-#   source <(k3d completion zsh)
-# fi
 
 eval "$(fzf --zsh)"
 
@@ -91,7 +83,8 @@ alias w="watch -n 1"
 alias k="kubectl"
 alias expl="xdg-open"
 alias sss="ssh server"
-alias rag=". ranger"
+alias rag="ranger"
+alias ragcd=". ranger"
 alias gic="git clone"
 alias code-cleanup="cc"
 alias fix-mod="find . -not -path '*/vendor/*' -name 'go.mod' -printf '%h\n' -execdir sh -c 'go mod tidy; go fmt .' \;"
