@@ -54,7 +54,6 @@ end, { desc = "Show [I]nlay [H]ints" })
 
 -- vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
-vim.keymap.set("n", "<leader>nt", "<cmd>NvimTreeToggle<CR>")
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 vim.keymap.set("n", "J", "mzJ`z")
@@ -62,8 +61,6 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
--- backspace
-vim.keymap.set("i", "<C-u>", "<BS>")
 -- void paste
 vim.keymap.set("x", "<leader>p", [["_dP]])
 vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
@@ -82,7 +79,7 @@ vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper win
 
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
-	group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+	group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
 	callback = function()
 		vim.highlight.on_yank()
 	end,
@@ -178,9 +175,15 @@ require("lazy").setup({
 			vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
 			vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
 			vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
-			vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
+			-- vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
 			vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
 			vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
+			vim.keymap.set(
+				"n",
+				"<leader>sl",
+				builtin.spell_suggest,
+				{ desc = '[S]earch Recent Files ("." for repeat)' }
+			)
 			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
 
 			-- Slightly advanced example of overriding default behavior and theme
@@ -235,16 +238,13 @@ require("lazy").setup({
 						vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 					end
 
-					map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-					map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-					map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-					map("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
-					map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-					map(
-						"<leader>ws",
-						require("telescope.builtin").lsp_dynamic_workspace_symbols,
-						"[W]orkspace [S]ymbols"
-					)
+					local buitin = require("telescope.builtin")
+					map("gd", buitin.lsp_definitions, "[G]oto [D]efinition")
+					map("gr", buitin.lsp_references, "[G]oto [R]eferences")
+					map("gI", buitin.lsp_implementations, "[G]oto [I]mplementation")
+					map("<leader>D", buitin.lsp_type_definitions, "Type [D]efinition")
+					map("<leader>ds", buitin.lsp_document_symbols, "[D]ocument [S]ymbols")
+					map("<leader>lws", buitin.lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
 
 					map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
 					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
@@ -264,11 +264,11 @@ require("lazy").setup({
 						})
 					end
 
-					-- if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-					-- 	map("<leader>th", function()
-					-- 		vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-					-- 	end, "[T]oggle Inlay [H]ints")
-					-- end
+					if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+						map("<leader>th", function()
+							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+						end, "[T]oggle Inlay [H]ints")
+					end
 				end,
 			})
 
@@ -480,12 +480,13 @@ require("lazy").setup({
 		end,
 	},
 	{
-		"folke/tokyonight.nvim",
-		priority = 1000, -- Make sure to load this before all the other start plugins.
-		init = function()
-			vim.cmd.colorscheme("tokyonight-night")
-			vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-			vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+		"kepano/flexoki-neovim",
+		name = "flexoki",
+		lazy = false,
+		priority = 100,
+		config = function()
+			vim.cmd("colorscheme flexoki-dark")
+			vim.api.nvim_set_hl(0, "Normal", { bg = "#000000" })
 		end,
 	},
 	-- Highlight todo, notes, etc in comments
@@ -554,24 +555,6 @@ require("lazy").setup({
 
 			vim.keymap.set("n", "<leader>a", mark.add_file)
 			vim.keymap.set("n", "<C-e>", ui.toggle_quick_menu)
-		end,
-	},
-	{
-		"zbirenbaum/copilot.lua",
-		cmd = "Copilot",
-		event = "InsertEnter",
-		config = function()
-			require("copilot").setup({
-				panel = {
-					auto_refresh = true,
-				},
-				suggestion = {
-					auto_trigger = false,
-				},
-				filetypes = {
-					["*"] = true,
-				},
-			})
 		end,
 	},
 	{
