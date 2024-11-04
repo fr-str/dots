@@ -480,15 +480,30 @@ require("lazy").setup({
 		end,
 	},
 	{
-		"kepano/flexoki-neovim",
-		name = "flexoki",
-		lazy = false,
-		priority = 100,
+		"aktersnurra/no-clown-fiesta.nvim",
 		config = function()
-			vim.cmd("colorscheme flexoki-dark")
+			vim.cmd("colorscheme no-clown-fiesta")
 			vim.api.nvim_set_hl(0, "Normal", { bg = "#000000" })
 		end,
 	},
+	-- {
+	-- 	"kepano/flexoki-neovim",
+	-- 	name = "flexoki",
+	-- 	lazy = false,
+	-- 	priority = 100,
+	-- 	config = function()
+	-- 		vim.cmd("colorscheme flexoki-dark")
+	-- 		vim.api.nvim_set_hl(0, "Normal", { bg = "#000000" })
+	-- 		local base = require("flexoki.highlights.base")
+	-- 		local bg = base.groups()
+	-- 		local c = require("flexoki.palette").palette()
+	-- 		bg["Pmenu"] = { fg = c["tx-2"], bg = c["bg-2"], sp = "NONE", blend = 50 }
+	--
+	-- 		base.groups = function()
+	-- 			return bg
+	-- 		end
+	-- 	end,
+	-- },
 	-- Highlight todo, notes, etc in comments
 	{
 		"folke/todo-comments.nvim",
@@ -534,11 +549,13 @@ require("lazy").setup({
 				marker = "[dupa]",
 				logStatements = {
 					variableLog = {
-						go = 'fmt.Println("%s %s: ",%s)',
+						-- go = 'fmt.Fprintln(config.LogFile,"%s %s: ",%s)',
+						go = 'log.Debug("%s %s: ",%s)',
+						-- go = 'fmt.Println("%s %s: ",%s)',
 						zig = 'std.debug.print("%s %s: {any}\\n",.{%s});',
 					},
 					objectLog = {
-						go = '/*%s*/b,_:=json.MarshalIndent(%s,""," ");fmt.Println(string(b))//[dupa]',
+						go = '/*%s*/b,_:=json.MarshalIndent(%s,""," ");fmt.Fprintln(config.LogFile,string(b))//[dupa]',
 					},
 				},
 			})
