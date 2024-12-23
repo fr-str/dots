@@ -550,12 +550,13 @@ require("lazy").setup({
 				logStatements = {
 					variableLog = {
 						-- go = 'fmt.Fprintln(config.LogFile,"%s %s: ",%s)',
-						go = 'log.Debug("%s %s: ",%s)',
-						-- go = 'fmt.Println("%s %s: ",%s)',
+						-- go = 'log.Debug("%s %s: ",%s)',
+						go = 'fmt.Println("%s %s: ",%s)',
 						zig = 'std.debug.print("%s %s: {any}\\n",.{%s});',
 					},
 					objectLog = {
-						go = '/*%s*/b,_:=json.MarshalIndent(%s,""," ");fmt.Fprintln(config.LogFile,string(b))//[dupa]',
+						go = '/*%s*/b,_:=json.MarshalIndent(%s,""," ");fmt.Println(string(b))//[dupa]',
+						-- go = '/*%s*/b,_:=json.MarshalIndent(%s,""," ");fmt.Fprintln(config.LogFile,string(b))//[dupa]',
 					},
 				},
 			})
