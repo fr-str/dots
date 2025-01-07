@@ -326,7 +326,6 @@ require("lazy").setup({
 			})
 		end,
 	},
-
 	{ -- Autoformat
 		"stevearc/conform.nvim",
 		opts = {
@@ -352,7 +351,6 @@ require("lazy").setup({
 			},
 		},
 	},
-
 	{ -- Autocompletion
 		"hrsh7th/nvim-cmp",
 		event = "InsertEnter",
@@ -466,6 +464,12 @@ require("lazy").setup({
 					{ name = "path" },
 				},
 			})
+			cmp.setup.filetype({ "sql" }, {
+				sources = {
+					{ name = "vim-dadbod-completition" },
+					{ name = "buffer" },
+				},
+			})
 		end,
 	},
 	{ -- Collection of various small independent plugins/modules
@@ -550,12 +554,13 @@ require("lazy").setup({
 				logStatements = {
 					variableLog = {
 						-- go = 'fmt.Fprintln(config.LogFile,"%s %s: ",%s)',
-						-- go = 'log.Debug("%s %s: ",%s)',
-						go = 'fmt.Println("%s %s: ",%s)',
-						zig = 'std.debug.print("%s %s: {any}\\n",.{%s});',
+						go = 'log.Trace("{{marker}}",log.Any("{{var}}",{{var}}))',
+						-- go = 'fmt.Println("{{marker}} {{var}}: ",{{var}})',
+						zig = 'std.debug.print("{{marker}} {{var}}: {any}\\n",.{{{var}}});',
 					},
 					objectLog = {
-						go = '/*%s*/b,_:=json.MarshalIndent(%s,""," ");fmt.Println(string(b))//[dupa]',
+						-- go = '/*{{marker}}*/b,_:=json.MarshalIndent({{var}},""," ");fmt.Println(string(b))//{{marker}}',
+						go = 'log.Trace("{{marker}}",log.JSON({{var}}))',
 						-- go = '/*%s*/b,_:=json.MarshalIndent(%s,""," ");fmt.Fprintln(config.LogFile,string(b))//[dupa]',
 					},
 				},
@@ -749,6 +754,32 @@ require("lazy").setup({
 			})
 			vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 		end,
+	},
+	{
+		"kristijanhusak/vim-dadbod-ui",
+		dependencies = {
+			{ "kristijanhusak/vim-dadbod-completion", ft = { "sql" } },
+			{ "tpope/vim-dadbod", lazy = true },
+		},
+		cmd = {
+			"DBUI",
+			"DBUIToggle",
+			"DBUIAddConnection",
+			"DBUIFindBuffer",
+		},
+		init = function()
+			vim.g.db_ui_use_nerd_fonts = 1
+		end,
+	},
+	{
+		"OXY2DEV/markview.nvim",
+		lazy = false, -- Recommended
+		-- ft = "markdown" -- If you decide to lazy-load anyway
+
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-tree/nvim-web-devicons",
+		},
 	},
 }, {
 	ui = {
