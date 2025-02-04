@@ -57,13 +57,14 @@ export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 # export SJ_LAST_COMMAND_LOG=""
 
 #aliases----
-eval $(thefuck --alias)
+#global
+alias -g G='| grep'
+# pipe output to less
+alias -g L='| less'
+# convert multiline output to single line and copy it to the system clipboard
+alias -g C='| tr -d ''\n'' | xclip -selection clipboard' 
 #arch
 alias pacman="$su pacman"
-# debian
-alias aptt="$su apt -y"
-# fedora
-alias dnff="$su dnf -y"
 # git
 alias gsps="git stash && git pull --rebase && git stash pop"
 alias lzg="lazygit"
@@ -85,6 +86,7 @@ alias expl="xdg-open"
 alias sss="ssh server"
 alias rag="ranger"
 alias ragcd=". ranger"
+alias gocov="printCoverage"
 alias gic="git clone"
 alias code-cleanup="cc"
 alias fix-mod="find . -not -path '*/vendor/*' -name 'go.mod' -printf '%h\n' -execdir sh -c 'go mod tidy; go fmt .' \;"
@@ -106,8 +108,6 @@ func main() {
 	
 }'>> main.go && go mod init test && code ." 
 alias math='f(){ echo "$1" | bc; }; f'
-# alias sj='f(){ [[ ! -d /tmp/sj ]] && mkdir /tmp/sj;  SJ_LAST_COMMAND_LOG="/tmp/sj/${1}.log";echo "duuu $@"; "$@" &> "/tmp/sj/${1}.log"; [[ ! $? -eq 0 ]] && bat "/tmp/sj/${1}.log"; }; f'
-# alias sjlog='[[ ! -z $SJ_LAST_COMMAND_LOG ]] && bat $SJ_LAST_COMMAND_LOG'
 # -----------------------------------------------------------------------------
 
 
@@ -129,21 +129,33 @@ if [[ $distro == "arch" ]]; then
     alias updm-score="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist"
 fi
 
-s='(run|build|make|install|yay)'
-function help {
-    # Replace ? with --help flag
-    if [[ "$BUFFER" =~ '^(-?\w\s?)+\?$' ]]; then
-        BUFFER="${BUFFER::-1} --help"
-    fi
 
-    # If --help flag found, pipe output through bat
-    if [[ "$BUFFER" =~ '^(-?\w\s?)+ --help$' ]]; then
-        BUFFER="$BUFFER | bat -p -l help"
-    fi
-    
-    # press enter
-    zle accept-line
+function printCoverage {
+  FILE=$(mktemp)
+  go test ./... -coverprofile=''${FILE}
+  cat ''${FILE} | grep -Fv -e '.gen.go' -e '.pb.go' > ''${FILE}.filter
+  if [ "$1" == "html" ]; then
+    go tool cover -html=''${FILE}.filter
+  else
+    go tool cover -func=''${FILE}.filter
+  fi
 }
+
+function  mans(){
+    man -k . \
+    | fzf -n1,2 --preview "echo {} \
+    | cut -d' ' -f1 \
+    | sed 's# (#.#' \
+    | sed 's#)##' \
+    | xargs -I% man %" --bind "enter:execute: \
+      (echo {} \
+      | cut -d' ' -f1 \
+      | sed 's# (#.#' \
+      | sed 's#)##' \
+      | xargs -I% man % \
+      | less -R)"
+}
+shrug() { echo -n "¯\_(ツ)_/¯" |tee /dev/tty| xsel -bi; }
 
 tmux-window-name() {
 	($TMUX_PLUGIN_MANAGER_PATH/tmux-window-name/scripts/rename_session_windows.py &> /dev/null &)
@@ -152,13 +164,9 @@ tmux-window-name() {
 autoload -U add-zsh-hook
 add-zsh-hook chpwd tmux-window-name
 
-zle -N help
-bindkey '^J' help
-bindkey '^M' help
 bindkey -r '^[l'
 bindkey '^[l' autosuggest-accept
 bindkey "^u" backward-delete-char
-# bindkey '^0' autosuggest-execute
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
