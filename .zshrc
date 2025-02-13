@@ -5,7 +5,7 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="refined"
 PLUGIN_PATH="${ZSH_CUSTOM1:-$ZSH/custom}/plugins"
 
-plugins=(git kubectl docker sudo history dirhistory alias-tips update-plugin command-not-found)
+plugins=(git kubectl docker sudo dirhistory alias-tips update-plugin command-not-found history)
 
 if [[ ! -d $PLUGIN_PATH ]]; then
   mkdir -p $PLUGIN_PATH
@@ -110,8 +110,6 @@ alias prptmp="cd /tmp/home-tmp && mkdir gotmp; cd gotmp && echo 'package main
 func main() {
 	
 }'>> main.go && go mod init test && code ." 
-alias math='f(){ echo "$1" | bc; }; f'
-# -----------------------------------------------------------------------------
 
 
 function cc(){
@@ -169,7 +167,8 @@ add-zsh-hook chpwd tmux-window-name
 
 bindkey -r '^[l'
 bindkey '^[l' autosuggest-accept
-bindkey "^u" backward-delete-char
+# bindkey "^u" backward-delete-char
+# bindkey '^0' autosuggest-execute
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
