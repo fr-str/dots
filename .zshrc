@@ -64,15 +64,13 @@ alias -g L='| less'
 # convert multiline output to single line and copy it to the system clipboard
 alias -g C='| tr -d ''\n'' | xclip -selection clipboard' 
 # color help
-alias -g -- -h='-h 2>&1 | bat --language=help --style=plain'
-alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
 #arch
 alias pacman="$su pacman"
 # git
 alias gsps="git stash && git pull --rebase && git stash pop"
+alias gic="git clone"
 alias lzg="lazygit"
 alias lzd="lazydocker"
-alias lzk="lazykube"
 # compileDeamon
 alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.rs" -include="*.html" -include="*.sh" -include="*.toml" -include="*.zig" -color=true -log-prefix=false -command="$1" -command-stop=true; }; f'
 # else
@@ -83,33 +81,33 @@ alias cdf="cd $find_dirs"
 alias ff='f(){ find . -type d \( -name "node_modules" -o -name ".cache" \) -prune -o -type f -name $1 -print | fzf;}; f'
 alias cat="bat"
 alias forcoz='go build -ldflags=-compressdwarf=false -gcflags=all="-N -l"'
-alias w="watch -n 1"
+alias w="watch -n 0.2"
 alias k="kubectl"
+alias ain="ain ~/.config/global.ain"
 alias expl="xdg-open"
-alias sss="ssh server"
 alias rag="ranger"
 alias ragcd=". ranger"
 alias gocov="printCoverage"
-alias gic="git clone"
 alias code-cleanup="cc"
-alias fix-mod="find . -not -path '*/vendor/*' -name 'go.mod' -printf '%h\n' -execdir sh -c 'go mod tidy; go fmt .' \;"
 alias rr="rm -rf"
 alias upgo='dupa=$PWD && cd ~/.update-golang && git pull && $su ~/.update-golang/update-golang.sh && cd $dupa'
 alias goline='f(){ go build -gcflags="-m $1"}; f'
 alias gobce="go build -gcflags=-d=ssa/check_bce/debug=1"
-alias mkdircd='f(){ mkdir -p $1 && cd $1 }; f'
-alias lego="lego --path $HOME"
 alias vim=nvim
 alias tldrf='tldr --list | fzf --preview "tldr {1} --color=always" --preview-window=right,70% | xargs tldr'
 alias fzfv='fzf | xargs nvim'
-alias notes='vim ~/.notes'
 alias mult="sed -e 's/, \"/,\n\t\"/g' -e 's/{/{\n\t/g' -e 's/\}/\n}/g'"
+alias gub="~/go/bin/gup"
+alias dport='docker ps --format "table {{.Names}}\t{{.Ports}}"'
+alias dstat='docker ps -a --format "table {{.Names}}\t{{.Status}}"'
+
 # -----------------------------------------------------------------------------
 alias prptmp="cd /tmp/home-tmp && mkdir gotmp; cd gotmp && echo 'package main
 
 func main() {
 	
 }'>> main.go && go mod init test && code ." 
+# -----------------------------------------------------------------------------
 
 
 function cc(){
@@ -158,6 +156,90 @@ function  mans(){
 }
 shrug() { echo -n "¯\_(ツ)_/¯" |tee /dev/tty| xsel -bi; }
 
+wexec() {
+    local dir=""
+    local cmd=""
+    local timeout="0"
+    
+    # Parse options with getopts
+    while getopts ":t:h" opt; do
+        case $opt in
+            t)
+                timeout="$OPTARG"
+                ;;
+            h)
+                echo "Usage: watch_and_execute [-t|--timeout <time>] <directory> <command> [args...]"
+                return 0
+                ;;
+            \?)
+                echo "Invalid option: -$OPTARG" >&2
+                return 1
+                ;;
+            :)
+                echo "Option -$OPTARG requires an argument." >&2
+                return 1
+                ;;
+        esac
+    done
+    
+    # Shift past options
+    shift $((OPTIND-1))
+    
+    # Check required arguments
+    if [ $# -lt 2 ]; then
+        echo "Usage: watch_and_execute [-t|--timeout <time>] <directory> <command> [args...]"
+        return 1
+    fi
+    
+    dir="$1"
+    shift
+    cmd="$@"
+    
+    # Verify directory exists
+    if [ ! -d "$dir" ]; then
+        echo "Error: Directory '$dir' does not exist"
+        return 1
+    fi
+    
+    # Watch directory and execute command on changes
+    inotifywait --quiet --monitor --recursive \
+        --event close_write \
+        --format '%w%f' "$dir" |
+    while read -r filename; do
+        # Skip temporary files
+        if [[ $filename =~ "~( |$)" ]]; then
+            continue
+        fi
+        
+        if [[ $filename =~ "4913" ]]; then
+            continue
+        fi
+        # Get current time with milliseconds
+        local timestamp=$(date +"%H:%M:%S.%3N")
+        
+        echo "---"
+        echo "$timestamp: $filename"
+        
+        # Replace {file} with actual filename in command
+        local modified_cmd="$cmd"
+        modified_cmd="${modified_cmd//\{file\}/$filename}"
+        
+        # Execute command with timeout and proper shell handling
+        (
+            trap '' PIPE
+            if ! timeout --foreground "$timeout" sh -c "$modified_cmd"; then
+                local status_copy=$?
+                if [ $status -eq 124 ]; then
+                    echo "Command timed out after $timeout"
+                else
+                    echo "Command failed with exit code $status_copy"
+                fi
+            fi
+        ) 2>&1 | while read -r line; do
+            echo "$line"
+        done
+    done
+}
 tmux-window-name() {
 	($TMUX_PLUGIN_MANAGER_PATH/tmux-window-name/scripts/rename_session_windows.py &> /dev/null &)
 }

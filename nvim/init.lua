@@ -553,14 +553,14 @@ require("lazy").setup({
 				logStatements = {
 					variableLog = {
 						-- go = 'fmt.Fprintln(config.LogFile,"%s %s: ",%s)',
-						go = 'log.Trace("{{marker}}",log.Any("{{var}}",{{var}}))',
-						-- go = 'fmt.Println("{{marker}} {{var}}: ",{{var}})',
+						-- go = 'log.Trace("{{marker}}",log.Any("{{var}}",{{var}}))',
+						go = 'fmt.Println("{{marker}} {{var}}: ",{{var}})',
 						zig = 'std.debug.print("{{marker}} {{var}}: {any}\\n",.{{{var}}});',
 					},
 					objectLog = {
-						-- go = '/*{{marker}}*/b,_:=json.MarshalIndent({{var}},""," ");fmt.Println(string(b))//{{marker}}',
-						go = 'log.Trace("{{marker}}",log.JSON({{var}}))',
-						-- go = '/*%s*/b,_:=json.MarshalIndent(%s,""," ");fmt.Fprintln(config.LogFile,string(b))//[dupa]',
+						go = 'e := json.NewEncoder(os.Stdout)/*{{marker}}*/; e.SetIndent("", " ")/*{{marker}}*/; e.Encode({{var}})/*{{marker}}*/',
+						-- go = 'log.Trace("{{marker}}",log.JSON({{var}}))',
+						-- go = '/*{{marker}}*/b,_:=json.MarshalIndent({{var}},""," ");fmt.Println(string(b))//[dupa]',
 					},
 				},
 			})
@@ -646,9 +646,9 @@ require("lazy").setup({
 			"nvim-tree/nvim-web-devicons",
 		},
 		config = function()
-			require("trouble").setup({
-				icons = false,
-			})
+			-- require("trouble").setup({
+			-- 	icons = false,
+			-- })
 			vim.keymap.set("n", "<leader>q", function()
 				require("trouble").toggle()
 			end)
