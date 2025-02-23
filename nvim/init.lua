@@ -84,6 +84,20 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	end,
 })
 
+-- ain file type
+vim.filetype.add({
+	extension = {
+		ain = "ain",
+	},
+})
+vim.api.nvim_create_autocmd("FileType", {
+	group = vim.api.nvim_create_augroup("FixAinCommentString", { clear = true }),
+	callback = function(ev)
+		vim.bo[ev.buf].commentstring = "# %s"
+	end,
+	pattern = { "ain" },
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -262,12 +276,6 @@ require("lazy").setup({
 							callback = vim.lsp.buf.clear_references,
 						})
 					end
-
-					if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-						map("<leader>th", function()
-							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-						end, "[T]oggle Inlay [H]ints")
-					end
 				end,
 			})
 
@@ -301,7 +309,18 @@ require("lazy").setup({
 						},
 					},
 				},
+				openscad_lsp = {
+					cmd = { "openscad-lsp", "--stdio", "--fmt-style", "LLVM" },
+				},
 			}
+
+			vim.api.nvim_create_autocmd("FileType", {
+				group = vim.api.nvim_create_augroup("FixOpenSCADCommentString", { clear = true }),
+				callback = function(ev)
+					vim.bo[ev.buf].commentstring = "// %s"
+				end,
+				pattern = { "openscad", "scad" },
+			})
 
 			require("mason").setup()
 
@@ -518,7 +537,7 @@ require("lazy").setup({
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
 		opts = {
-			ensure_installed = { "bash", "c", "html", "lua", "markdown", "vim", "vimdoc", "go" },
+			ensure_installed = { "bash", "c", "html", "lua", "markdown", "vim", "vimdoc", "go", "zig" },
 			-- Autoinstall languages that are not installed
 			auto_install = true,
 			highlight = {
@@ -531,6 +550,16 @@ require("lazy").setup({
 			indent = { enable = true, disable = { "ruby" } },
 		},
 		config = function(_, opts)
+			local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+			parser_config.ain = {
+				install_info = {
+					url = "~/code/tree-sitter-ain",
+					files = { "src/parser.c" },
+					generate_requires_npm = false,
+					requires_generate_from_grammar = false,
+				},
+				filetype = "ain",
+			}
 			-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 
 			---@diagnostic disable-next-line: missing-fields
