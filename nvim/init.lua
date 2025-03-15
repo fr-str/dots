@@ -671,20 +671,42 @@ require("lazy").setup({
 	},
 	{
 		"folke/trouble.nvim",
-		dependencies = {
-			"nvim-tree/nvim-web-devicons",
+		opts = {
+			focus = true,
+		}, -- for default options, refer to the configuration section for custom setup.
+		cmd = "Trouble",
+		keys = {
+			{
+				"<leader>q",
+				"<cmd>Trouble diagnostics toggle<cr>",
+				desc = "Diagnostics (Trouble)",
+			},
+			{
+				"<leader>xX",
+				"<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+				desc = "Buffer Diagnostics (Trouble)",
+			},
+			{
+				"<leader>cs",
+				"<cmd>Trouble symbols toggle focus=false<cr>",
+				desc = "Symbols (Trouble)",
+			},
+			{
+				"<leader>cl",
+				"<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
+				desc = "LSP Definitions / references / ... (Trouble)",
+			},
+			{
+				"<leader>xL",
+				"<cmd>Trouble loclist toggle<cr>",
+				desc = "Location List (Trouble)",
+			},
+			{
+				"<leader>xQ",
+				"<cmd>Trouble qflist toggle<cr>",
+				desc = "Quickfix List (Trouble)",
+			},
 		},
-		config = function()
-			-- require("trouble").setup({
-			-- 	icons = false,
-			-- })
-			vim.keymap.set("n", "<leader>q", function()
-				require("trouble").toggle()
-			end)
-			vim.keymap.set("n", "gR", function()
-				require("trouble").toggle("lsp_references")
-			end)
-		end,
 	},
 	{
 		"christoomey/vim-tmux-navigator",
@@ -809,6 +831,29 @@ require("lazy").setup({
 			"nvim-treesitter/nvim-treesitter",
 			"nvim-tree/nvim-web-devicons",
 		},
+	},
+	{
+		"supermaven-inc/supermaven-nvim",
+		config = function()
+			require("supermaven-nvim").setup({
+				keymaps = {
+					accept_suggestion = "<M-l>",
+					clear_suggestion = "<C-]>",
+					accept_word = "<C-j>",
+				},
+				ignore_filetypes = { cpp = true }, -- or { "cpp", }
+				color = {
+					suggestion_color = "#ffffff",
+					cterm = 244,
+				},
+				log_level = "info", -- set to "off" to disable logging completely
+				disable_inline_completion = false, -- disables inline completion for use with cmp
+				disable_keymaps = false, -- disables built in keymaps for more manual control
+				-- condition = function()
+				--   return false
+				-- end -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
+			})
+		end,
 	},
 }, {
 	ui = {
