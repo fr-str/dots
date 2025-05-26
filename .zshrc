@@ -1,4 +1,4 @@
-export PATH=$HOME/bin:/usr/local/bin:/usr/local/go/bin:/home/$USER/go/bin:/home/$USER/.local/bin:$PATH
+export PATH=$HOME/.cargo/bin/:$HOME/bin:/usr/local/bin:/usr/local/go/bin:/home/$USER/go/bin:/home/$USER/.local/bin:$PATH
 
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -17,10 +17,7 @@ function installSource(){
 }
 
 
-# source $PLUGIN_PATH/autopair/autopair.zsh
-# autopair-init
 source $PLUGIN_PATH/zsh-autosuggestions/zsh-autosuggestions.zsh
-# source $PLUGIN_PATH/autojump/autojump.zsh
 source $PLUGIN_PATH/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 source $ZSH/oh-my-zsh.sh
 
@@ -28,7 +25,7 @@ eval "$(fzf --zsh)"
 
 autoload -U colors && colors
 # check if root
-PS1="%F{cyan}serverek %(?.%F{green}.%F{red})❯ %f"
+PS1="%(?.%F{green}.%F{red})❯ %f"
 su=sudo
 if [ "$UID" -eq 0 ]; then
   PS1="%F{cyan}%n %(?.%F{green}.%F{red})❯ %f"
@@ -48,13 +45,8 @@ export EDITOR=nvim
 # Use bat for man
 export MANPAGER="sh -c 'col -bx | bat -l man -p'";
 export MANROFFOPT="-c";
-#kubeconfig
-# alias get-all-configs='f(){ v=$(find ~/.k3d/ -maxdepth 1 | tail -n +2 |xargs | sed "s/ /:/g");if [ -z "$v" ]; then;echo "$HOME/.kube/config";export KUBECONFIG=$HOME/.kube/config;else;echo "$v:$HOME/.kube/config";KUBECONFIG="$v:$HOME/.kube/config";fi; }; f'
-# export KUBECONFIG=$(get-all-configs)
 export KUBE_CONFIG_FILE=$HOME/.k3d/kubeconfig-k3s-default.yaml
-export LOGGER=dev
 export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-# export SJ_LAST_COMMAND_LOG=""
 
 #aliases----
 #global
@@ -63,7 +55,6 @@ alias -g G='| grep'
 alias -g L='| less'
 # convert multiline output to single line and copy it to the system clipboard
 alias -g C='| tr -d ''\n'' | xclip -selection clipboard' 
-# color help
 #arch
 alias pacman="$su pacman"
 # git
@@ -101,6 +92,8 @@ alias gub="~/go/bin/gup"
 alias dport='docker ps --format "table {{.Names}}\t{{.Ports}}"'
 alias dstat='docker ps -a --format "table {{.Names}}\t{{.Status}}"'
 
+alias backup="sudo rsync -aAXHP --info=progress2 --no-inc-recursive --numeric-ids --human-readable --stats"
+
 # -----------------------------------------------------------------------------
 alias prptmp="cd /tmp/home-tmp && mkdir gotmp; cd gotmp && echo 'package main
 
@@ -110,15 +103,15 @@ func main() {
 # -----------------------------------------------------------------------------
 
 
-function cc(){
-  git fetch --prune
-  branches=$(git branch -vv | grep ': gone]' | awk '{print $1}')
-
-  if [ -z $branches ]; then
-      echo "Nothing to do"
-  fi
-  echo $branches | xargs -n1 --no-run-if-empty git branch --delete --force
-}
+# function cc(){
+#   git fetch --prune
+#   branches=$(git branch -vv | grep ': gone]' | awk '{print $1}')
+#
+#   if [ -z $branches ]; then
+#       echo "Nothing to do"
+#   fi
+#   echo $branches | xargs -n1 --no-run-if-empty git branch --delete --force
+# }
 
 
 # Arch Mirrors update
@@ -155,6 +148,35 @@ function  mans(){
       | less -R)"
 }
 shrug() { echo -n "¯\_(ツ)_/¯" |tee /dev/tty| xsel -bi; }
+
+video_to_gif() {
+    # Check if input file exists
+    if [ ! -f "$1" ]; then
+        echo "Error: Input file '$1' not found"
+        return 1
+    fi
+    
+    base_name="${1%.*}"
+    output_file="edited.${base_name}.gif"
+    temp_dir=$(mktemp -d /tmp/gif_conversion.XXXXXX)
+    
+    temp_palette="$temp_dir/palette.png"
+    
+    ffmpeg -v error -i "$1" -vf fps=15,scale=320:-1:flags=lanczos,palettegen=max_colors=256 -y "$temp_palette"
+    
+    ffmpeg -v error -i "$1" -i "$temp_palette" \
+        -filter_complex "fps=15,scale=320:-1:flags=lanczos[x];[x][1:v]paletteuse=dither=floyd_steinberg" \
+        -loop 0 "$output_file"
+    
+    rm -rf "$temp_dir"
+    
+    if [ $? -eq 0 ] && [ -f "$output_file" ]; then
+        echo "Successfully created: $output_file"
+    else
+        echo "Error: Failed to create GIF"
+        return 1
+    fi
+}
 
 wexec() {
     local dir=""
@@ -249,7 +271,6 @@ add-zsh-hook chpwd tmux-window-name
 
 bindkey -r '^[l'
 bindkey '^[l' autosuggest-accept
-# bindkey "^u" backward-delete-char
 # bindkey '^0' autosuggest-execute
 
 export NVM_DIR="$HOME/.nvm"

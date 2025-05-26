@@ -239,10 +239,6 @@ require("lazy").setup({
 			{ "folke/neodev.nvim", opts = {} },
 		},
 		config = function()
-			vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers["signature_help"], {
-				-- border = "single",
-				close_events = { "CursorMoved", "BufHidden" },
-			})
 			vim.keymap.set("i", "<c-s>", vim.lsp.buf.signature_help)
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
@@ -854,6 +850,9 @@ require("lazy").setup({
 				-- end -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
 			})
 		end,
+	},
+	{
+		"ziglang/zig.vim",
 	},
 }, {
 	ui = {
