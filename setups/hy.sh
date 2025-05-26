@@ -20,3 +20,8 @@ yay -S \
     playerctl \
     mpv
     
+mkdir -p $HOME/.config/hypr/
+ln -s $HOME/.dots/hyprland.conf $HOME/.config/hypr/
+mkdir -p $HOME/.config/waybar
+ln -s $HOME/.dots/waybar/style.css $HOME/.config/waybar/
+ln -s $HOME/.dots/waybar/config.jsonc $HOME/.config/waybar/

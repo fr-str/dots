@@ -10,7 +10,7 @@
         "hyprland/workspaces",
         "hyprland/submap"
     ],
-    "modules-center": [ ],
+    "modules-center": [ "hyprland/window" ],
     "modules-right": [
         "mpd",
         "idle_inhibitor",
@@ -31,13 +31,12 @@
     "hyprland/workspaces": {
         "format": "{icon}",
         "format-window-separator": "",
-        "icon-size": 10,
     },
     "hyprland/window": {
-        "format": "{icon}",
-        "format-window-separator": "",
-        "icon-size": 10,
+        "format": "{class}",
+        "separate-outputs": true
     },
+
     "keyboard-state": {
         "numlock": true,
         "capslock": true,
