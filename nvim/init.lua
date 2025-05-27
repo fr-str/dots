@@ -834,12 +834,13 @@ require("lazy").setup({
 			require("supermaven-nvim").setup({
 				keymaps = {
 					accept_suggestion = "<M-l>",
-					clear_suggestion = "<C-]>",
-					accept_word = "<C-j>",
+					clear_suggestion = "<M-[>",
+					accept_word = "<M-j>",
 				},
 				ignore_filetypes = { cpp = true }, -- or { "cpp", }
 				color = {
-					suggestion_color = "#ffffff",
+					-- grey
+					suggestion_color = "#8a8a8a",
 					cterm = 244,
 				},
 				log_level = "info", -- set to "off" to disable logging completely
