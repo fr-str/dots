@@ -26,6 +26,7 @@ eval "$(fzf --zsh)"
 autoload -U colors && colors
 # check if root
 PS1="%(?.%F{green}.%F{red})❯ %f"
+RPROMPT="%F{8}${SSH_TTY:+%n@%m}[%?]%f"
 su=sudo
 if [ "$UID" -eq 0 ]; then
   PS1="%F{cyan}%n %(?.%F{green}.%F{red})❯ %f"
