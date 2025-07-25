@@ -67,6 +67,23 @@ vim.keymap.set("n", "<leader>fb", vim.lsp.buf.format)
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 -- vim.keymap.set({ "n", "v" }, "<leader>y", require('osc52').copy_visual)
 
+local function toggle_tilde_wrap()
+	-- get line
+	local line = vim.fn.getline(".")
+	-- select text ignoring whitespace
+	local text = vim.fn.substitute(line, "^\\s*\\|\\s*$", "", "g")
+	-- if text has tilde, remove it
+	if string.find(text, "~") then
+		text = string.gsub(text, "~", "")
+	else
+		-- add tilde to the beginning of the line and end of the text
+		text = "~" .. text .. "~"
+	end
+	-- replace the line with tilde wrapped text
+	vim.fn.setline(".", text)
+end
+
+vim.keymap.set("n", "<leader>~", toggle_tilde_wrap, { desc = "Toggle ~ wrap" })
 --  See `:help wincmd` for a list of all window commands
 vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
@@ -531,6 +548,10 @@ require("lazy").setup({
 	},
 	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
+		dependencies = {
+			"OXY2DEV/markview.nvim",
+		},
+		lazy = false,
 		build = ":TSUpdate",
 		opts = {
 			ensure_installed = { "bash", "c", "html", "lua", "markdown", "vim", "vimdoc", "go", "zig" },
@@ -568,6 +589,15 @@ require("lazy").setup({
 			--    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
 			--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 		end,
+	},
+	{
+		"OXY2DEV/markview.nvim",
+		lazy = false, -- Recommended
+		-- ft = "markdown" -- If you decide to lazy-load anyway
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-tree/nvim-web-devicons",
+		},
 	},
 	{
 		"chrisgrieser/nvim-chainsaw",
@@ -819,16 +849,6 @@ require("lazy").setup({
 		end,
 	},
 	{
-		"OXY2DEV/markview.nvim",
-		lazy = false, -- Recommended
-		-- ft = "markdown" -- If you decide to lazy-load anyway
-
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter",
-			"nvim-tree/nvim-web-devicons",
-		},
-	},
-	{
 		"supermaven-inc/supermaven-nvim",
 		config = function()
 			require("supermaven-nvim").setup({
@@ -854,6 +874,20 @@ require("lazy").setup({
 	},
 	{
 		"ziglang/zig.vim",
+	},
+	{
+		"VPavliashvili/json-nvim",
+		config = function()
+			vim.keymap.set("n", "<leader>jff", "<cmd>JsonFormatFile<cr>")
+			vim.keymap.set("n", "<leader>jmf", "<cmd>JsonMinifyFile<cr>")
+			-- autoformat on save
+			vim.api.nvim_create_autocmd("BufWritePre", {
+				group = vim.api.nvim_create_augroup("json-nvim", { clear = true }),
+				callback = function(ev)
+					vim.cmd("JsonFormatFile")
+				end,
+			})
+		end,
 	},
 	{
 		"johmsalas/text-case.nvim",
