@@ -614,6 +614,10 @@ require("lazy").setup({
 						go = 'e := json.NewEncoder(os.Stdout)/*{{marker}}*/; e.SetIndent("", " ")/*{{marker}}*/; e.Encode({{var}})/*{{marker}}*/',
 						-- go = 'log.Trace("{{marker}}",log.JSON({{var}}))',
 						-- go = '/*{{marker}}*/b,_:=json.MarshalIndent({{var}},""," ");fmt.Println(string(b))//[dupa]',
+						zig = {
+							"var writer = std.fs.File.stdout().writer(&[_]u8{});// {{marker}}",
+							"try std.json.Stringify.value({{var}}, .{ .whitespace = .indent_1 }, &writer.interface);// {{marker}}",
+						},
 					},
 				},
 			})
@@ -847,29 +851,39 @@ require("lazy").setup({
 		end,
 	},
 	{
-		"supermaven-inc/supermaven-nvim",
-		config = function()
-			require("supermaven-nvim").setup({
-				keymaps = {
-					accept_suggestion = "<M-l>",
-					clear_suggestion = "<M-[>",
-					accept_word = "<M-j>",
-				},
-				ignore_filetypes = { cpp = true }, -- or { "cpp", }
-				color = {
-					-- grey
-					suggestion_color = "#8a8a8a",
-					cterm = 244,
-				},
-				log_level = "info", -- set to "off" to disable logging completely
-				disable_inline_completion = false, -- disables inline completion for use with cmp
-				disable_keymaps = false, -- disables built in keymaps for more manual control
-				-- condition = function()
-				--   return false
-				-- end -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
-			})
-		end,
+		"OXY2DEV/markview.nvim",
+		lazy = false, -- Recommended
+		-- ft = "markdown" -- If you decide to lazy-load anyway
+
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-tree/nvim-web-devicons",
+		},
 	},
+	-- {
+	-- 	"supermaven-inc/supermaven-nvim",
+	-- 	config = function()
+	-- 		require("supermaven-nvim").setup({
+	-- 			keymaps = {
+	-- 				accept_suggestion = "<M-l>",
+	-- 				clear_suggestion = "<M-[>",
+	-- 				accept_word = "<M-j>",
+	-- 			},
+	-- 			ignore_filetypes = { cpp = true }, -- or { "cpp", }
+	-- 			color = {
+	-- 				-- grey
+	-- 				suggestion_color = "#8a8a8a",
+	-- 				cterm = 244,
+	-- 			},
+	-- 			log_level = "info", -- set to "off" to disable logging completely
+	-- 			disable_inline_completion = false, -- disables inline completion for use with cmp
+	-- 			disable_keymaps = false, -- disables built in keymaps for more manual control
+	-- 			-- condition = function()
+	-- 			--   return false
+	-- 			-- end -- condition to check for stopping supermaven, `true` means to stop supermaven when the condition is true.
+	-- 		})
+	-- 	end,
+	-- },
 	{
 		"ziglang/zig.vim",
 	},
