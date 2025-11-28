@@ -26,7 +26,7 @@ eval "$(fzf --zsh)"
 autoload -U colors && colors
 # check if root
 PS1="%(?.%F{green}.%F{red})❯ %f"
-RPROMPT="%F{8}${SSH_TTY:+%n@%m}[%?]%f"
+RPROMPT="%F{8}[%?] [%D{%H:%M:%S}]%f" #${SSH_TTY:+%n@%m}
 su=sudo
 if [ "$UID" -eq 0 ]; then
   PS1="%F{cyan}%n %(?.%F{green}.%F{red})❯ %f"
@@ -90,8 +90,8 @@ alias tldrf='tldr --list | fzf --preview "tldr {1} --color=always" --preview-win
 alias fzfv='fzf | xargs nvim'
 alias mult="sed -e 's/, \"/,\n\t\"/g' -e 's/{/{\n\t/g' -e 's/\}/\n}/g'"
 alias gub="~/go/bin/gup"
-alias dport='docker ps --format "table {{.Names}}\t{{.Ports}}"'
-alias dstat='docker ps -a --format "table {{.Names}}\t{{.Status}}"'
+alias dport='docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}"'
+alias dstat='docker ps -a --format "table {{.ID}}\t{{.Names}}\t{{.Status}}"'
 
 alias backup="sudo rsync -aAXHP --info=progress2 --no-inc-recursive --numeric-ids --human-readable --stats"
 
