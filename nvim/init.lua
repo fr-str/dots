@@ -1,3 +1,24 @@
+-- local client = vim.lsp.start_client({
+-- 	name = "scl-lsp",
+-- 	cmd = { "/home/user/code/scl-lsp/zig-out/bin/scl_lsp" },
+-- })
+--
+-- if not client then
+-- 	vim.notify("Failed to start scl-lsp")
+-- end
+--
+-- vim.api.nvim_create_autocmd("FileType", {
+-- 	pattern = { "scl" },
+-- 	callback = function()
+-- 		vim.lsp.buf_attach_client(0, client)
+-- 	end,
+-- })
+-- vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+-- 	pattern = "*.scl",
+-- 	command = "set filetype=scl",
+-- })
+
+vim.diagnostic.config({ virtual_text = true })
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 -- tab size 4
@@ -62,7 +83,7 @@ vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("x", "<leader>p", [["_dP]])
 vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 vim.keymap.set("n", "<leader>fb", vim.lsp.buf.format)
-vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
+-- vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
 -- vim.keymap.set({ "n", "v" }, "<leader>y", require('osc52').copy_visual)
 
 local function toggle_tilde_wrap()
@@ -246,6 +267,8 @@ require("lazy").setup({
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 
+			-- "ziglang/zig.vim",
+
 			-- Useful status updates for LSP.
 			{ "j-hui/fidget.nvim", opts = {} },
 
@@ -274,6 +297,25 @@ require("lazy").setup({
 					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 					map("K", vim.lsp.buf.hover, "Hover Documentation")
 					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+
+					-- zig config
+					-- vim.g.zig_fmt_parse_errors = 0
+					-- vim.g.zig_fmt_autosave = 0
+					-- vim.api.nvim_create_autocmd("BufWritePre", {
+					-- 	pattern = { "*.zig", "*.zon" },
+					-- 	callback = function()
+					-- 		vim.lsp.buf.format()
+					-- 	end,
+					-- })
+					--
+					-- local lspconfig = require("lspconfig")
+					-- lspconfig.zig.setup({
+					-- 	settings = {
+					-- 		zls = {
+					-- 			semanticTokens = "partial",
+					-- 		},
+					-- 	},
+					-- })
 
 					local client = vim.lsp.get_client_by_id(event.data.client_id)
 					if client and client.server_capabilities.documentHighlightProvider then
@@ -320,18 +362,18 @@ require("lazy").setup({
 						},
 					},
 				},
-				openscad_lsp = {
-					cmd = { "openscad-lsp", "--stdio", "--fmt-style", "LLVM" },
-				},
+				-- openscad_lsp = {
+				-- 	cmd = { "openscad-lsp", "--stdio", "--fmt-style", "LLVM" },
+				-- },
 			}
 
-			vim.api.nvim_create_autocmd("FileType", {
-				group = vim.api.nvim_create_augroup("FixOpenSCADCommentString", { clear = true }),
-				callback = function(ev)
-					vim.bo[ev.buf].commentstring = "// %s"
-				end,
-				pattern = { "openscad", "scad" },
-			})
+			-- vim.api.nvim_create_autocmd("FileType", {
+			-- 	group = vim.api.nvim_create_augroup("FixOpenSCADCommentString", { clear = true }),
+			-- 	callback = function(ev)
+			-- 		vim.bo[ev.buf].commentstring = "// %s"
+			-- 	end,
+			-- 	pattern = { "openscad", "scad" },
+			-- })
 
 			require("mason").setup()
 
@@ -546,9 +588,6 @@ require("lazy").setup({
 	},
 	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
-		dependencies = {
-			"OXY2DEV/markview.nvim",
-		},
 		lazy = false,
 		build = ":TSUpdate",
 		opts = {
@@ -589,15 +628,6 @@ require("lazy").setup({
 		end,
 	},
 	{
-		"OXY2DEV/markview.nvim",
-		lazy = false, -- Recommended
-		-- ft = "markdown" -- If you decide to lazy-load anyway
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter",
-			"nvim-tree/nvim-web-devicons",
-		},
-	},
-	{
 		"chrisgrieser/nvim-chainsaw",
 		config = function()
 			local chain = require("chainsaw")
@@ -608,10 +638,13 @@ require("lazy").setup({
 						-- go = 'fmt.Fprintln(config.LogFile,"%s %s: ",%s)',
 						-- go = 'log.Trace("{{marker}}",log.Any("{{var}}",{{var}}))',
 						go = 'fmt.Println("{{marker}} {{var}}: ",{{var}})',
-						zig = 'std.debug.print("{{marker}} {{var}}: {any}\\n",.{{{var}}});',
+						-- go = 'l.Println("{{marker}} {{var}}: ",{{var}})',
+						zig = 'std.debug.print("{{marker}} {{var}}: {s}\\n",.{{{var}}});',
+						-- zig = 'std.log.info("{{marker}} {{var}}: {s}",.{{{var}}});',
 					},
 					objectLog = {
 						go = 'e := json.NewEncoder(os.Stdout)/*{{marker}}*/; e.SetIndent("", " ")/*{{marker}}*/; e.Encode({{var}})/*{{marker}}*/',
+						-- go = 'e := json.NewEncoder(lsp.l.Writer())/*{{marker}}*/; e.SetIndent("", " ")/*{{marker}}*/; e.Encode({{var}})/*{{marker}}*/',
 						-- go = 'log.Trace("{{marker}}",log.JSON({{var}}))',
 						-- go = '/*{{marker}}*/b,_:=json.MarshalIndent({{var}},""," ");fmt.Println(string(b))//[dupa]',
 						zig = {
@@ -850,16 +883,6 @@ require("lazy").setup({
 			vim.g.db_ui_use_nerd_fonts = 1
 		end,
 	},
-	{
-		"OXY2DEV/markview.nvim",
-		lazy = false, -- Recommended
-		-- ft = "markdown" -- If you decide to lazy-load anyway
-
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter",
-			"nvim-tree/nvim-web-devicons",
-		},
-	},
 	-- {
 	-- 	"supermaven-inc/supermaven-nvim",
 	-- 	config = function()
@@ -884,9 +907,6 @@ require("lazy").setup({
 	-- 		})
 	-- 	end,
 	-- },
-	{
-		"ziglang/zig.vim",
-	},
 	{
 		"VPavliashvili/json-nvim",
 		config = function()
