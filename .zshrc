@@ -1,4 +1,5 @@
 export PATH=$HOME/.cargo/bin/:$HOME/bin:/usr/local/bin:/usr/local/go/bin:/home/$USER/go/bin:/home/$USER/.local/bin:$PATH
+export PATH=$PATH:$HOME/.zvm/bin
 
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -51,9 +52,6 @@ export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 #aliases----
 #global
-alias -g G='| grep'
-# pipe output to less
-alias -g L='| less'
 # convert multiline output to single line and copy it to the system clipboard
 alias -g C='| tr -d ''\n'' | xclip -selection clipboard' 
 #arch
@@ -64,7 +62,7 @@ alias gic="git clone"
 alias lzg="lazygit"
 alias lzd="lazydocker"
 # compileDeamon
-alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.rs" -include="*.html" -include="*.sh" -include="*.toml" -include="*.zig" -color=true -log-prefix=false -command="$1" -command-stop=true; }; f'
+alias gocd='f(){ CompileDaemon -build="$2" -directory="$3" -include="*.templ" -include="*.html" -include="*.sh" -include="*.toml" -include="*.zig" -color=true -log-prefix=false -command="$1" -command-stop=true; }; f'
 # else
 find_dirs="\$(find . -type d \( -name '.cache' -o -name 'cache' -o -name '.git' -o -name 'node_modules' \) -prune -o -type d -print 2> /dev/null | fzf)"
 alias vimf="nvim \$(find . -type d \( -name 'node_modules' -o -name '.cache' \) -prune -o -type f -print | fzf)"
