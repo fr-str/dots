@@ -1,19 +1,25 @@
 {
-	"name": "my-snippets",
-	"contributes": {
-		"snippets": [
-			{
-				"language": [
-					"all"
-				],
-				"path": "./all.json"
-			},
-			{
-				"language": [
-					"go"
-				],
-				"path": "./go.json"
-			}
-		]
-	}
+  "name": "my-snippets",
+  "contributes": {
+    "snippets": [
+      {
+        "language": [
+          "all"
+        ],
+        "path": "./all.json"
+      },
+      {
+        "language": [
+          "zig"
+        ],
+        "path": "./zig.json"
+      },
+      {
+        "language": [
+          "go"
+        ],
+        "path": "./go.json"
+      }
+    ]
+  }
 }

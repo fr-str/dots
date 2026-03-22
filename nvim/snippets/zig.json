@@ -1,0 +1,17 @@
+
+{
+  "Print line": {
+    "prefix": "pl",
+    "body": [
+      "std.debug.print(\"-------------------------\",$1,\"-------------------------\n\",.{});$0"
+    ],
+    "description": "Print line"
+  },
+  "Print dupa": {
+    "prefix": "pd",
+    "body": [
+      "std.debug.print(\"------------------------- dupa -------------------------\n\",.{});$0"
+    ],
+    "description": "Print dupa"
+  }
+}
