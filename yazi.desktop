@@ -1,0 +1,8 @@
+# ~/.local/share/applications/yazi.desktop
+[Desktop Entry]
+Name=Yazi
+Exec=foot -- yazi
+Type=Application
+Terminal=true
+MimeType=inode/directory;
+
