@@ -512,6 +512,7 @@ do
 	vim.pack.add({ { src = gh("saghen/blink.cmp"), version = vim.version.range("1.*") } })
 	require("blink.cmp").setup({
 		keymap = {
+			["<C-k>"] = { "select_and_accept", "fallback" },
 			-- <tab>/<s-tab>: move to right/left of your snippet expansion
 			-- <c-space>: Open menu or open docs if already open
 			-- <c-n>/<c-p> or <up>/<down>: Select next/previous item
@@ -527,12 +528,11 @@ do
 		completion = {
 			-- By default, you may press `<c-space>` to show the documentation.
 			-- Optionally, set `auto_show = true` to show the documentation after a delay.
-            auto_show = true,
-			documentation = { auto_show = false, auto_show_delay_ms = 500 },
+			documentation = { auto_show = true, auto_show_delay_ms = 100 },
 		},
 
 		sources = {
-			default = { "lsp", "path", "snippets" },
+			default = { "lsp", "path", "buffer", "snippets"}
 		},
 
 		snippets = { preset = "luasnip" },
@@ -607,4 +607,10 @@ do
 			end
 		end,
 	})
+end
+
+do
+	require("plugins.oil")
+	require("plugins.tmux-navigator")
+	require("plugins.minuet")
 end
