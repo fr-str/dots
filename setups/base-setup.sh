@@ -57,7 +57,7 @@ fi
 
 
 # install stuff that I want
-$su $PM git zsh docker docker-compose btop neovim fzf tldr foot
+$su $PM git zsh docker docker-compose btop neovim fzf foot
 
 # config foot 
 [[ ! -e $HOME/.config/foot/foot.ini ]] && ln -s $HOME/.dots/foot/foot.ini $HOME/.config/foot/foot.ini
